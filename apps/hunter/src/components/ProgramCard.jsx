@@ -22,7 +22,7 @@ function statusChip({ program, profileDoc }) {
   return { label: ag.label + suffix, tone: ag.tone };
 }
 
-export function ProgramCard({ program, status, onStatusChange, profileMatch, onVendorClick, profileDoc }) {
+export function ProgramCard({ program, status, onStatusChange, onVendorClick, profileDoc }) {
   const [botOpen, setBotOpen] = useState(false);
   const lc = LANE_COLORS[program.lane];
   const sc = STATUS_CONFIG[status];
@@ -30,7 +30,6 @@ export function ProgramCard({ program, status, onStatusChange, profileMatch, onV
   const hasBillingRisk = program.tags.includes("billing_risk");
   const isStale = program.tags.includes("stale");
   const hasDeps = program.dependencies && program.dependencies.length > 0;
-  const dimmed = !profileMatch;
   const chip = statusChip({ program, profileDoc });
   const chipStyle = toneStyle(chip.tone);
   const laneTone = lc?.tone;
@@ -55,8 +54,6 @@ export function ProgramCard({ program, status, onStatusChange, profileMatch, onV
       ),
       borderRadius:4, padding:"16px 16px 14px",
       display:"flex", flexDirection:"column", gap:11,
-      opacity: status === "skip" ? 0.3 : isStale ? 0.55 : dimmed ? 0.4 : 1,
-      transition:"opacity 0.2s",
       minHeight: 0,
     }}>
 
@@ -132,7 +129,7 @@ export function ProgramCard({ program, status, onStatusChange, profileMatch, onV
       <div style={{ display:"flex", gap:7, alignItems:"center", marginTop:"auto", paddingTop:4 }}>
         <a href={program.urls.apply} target="_blank" rel="noopener noreferrer" style={{
           fontSize:9, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase",
-          color:"#080807", background:"var(--neutral-action)",
+          color:"var(--action-text)", background:"var(--neutral-action)",
           padding:"5px 11px", borderRadius:3, textDecoration:"none", flexShrink:0,
         }}>Apply →</a>
         {(() => {

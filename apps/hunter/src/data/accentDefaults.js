@@ -1,4 +1,5 @@
-// 14 user-editable color tokens. Values mirror tokens.css defaults so
+// 13 user-editable accent tokens. Contrast-critical neutrals remain owned by
+// the dark/light themes so customization cannot make the interface unreadable.
 // "Reset" returns to the same OKLCH the stylesheet declared.
 //
 // L is 0-1, C is 0-0.4, H is 0-360.
@@ -8,15 +9,12 @@ export const TOKEN_ORDER = [
   "accent", "gold", "match", "ok", "wait", "stop", "info",
   // Category accents
   "cat-devops", "cat-multimedia", "cat-research", "cat-business", "cat-tech", "cat-science",
-  // Neutral master (drives full grayscale)
-  "neutral",
 ];
 
 export const TOKEN_GROUPS = [
   { label: "Brand",        keys: ["accent", "gold", "match"] },
   { label: "Semantic",     keys: ["ok", "wait", "stop", "info"] },
   { label: "Categories",   keys: ["cat-devops", "cat-multimedia", "cat-research", "cat-business", "cat-tech", "cat-science"] },
-  { label: "Surface",      keys: ["neutral"] },
 ];
 
 export const TOKEN_LABELS = {
@@ -33,7 +31,6 @@ export const TOKEN_LABELS = {
   "cat-business":    "Business",
   "cat-tech":        "Tech & AI",
   "cat-science":     "Science & Education",
-  "neutral":         "Neutral (cascades grayscale)",
 };
 
 export const DEFAULT_ACCENTS = {
@@ -50,5 +47,4 @@ export const DEFAULT_ACCENTS = {
   "cat-business":   { l: 0.85, c: 0.17,  h: 95  },
   "cat-tech":       { l: 0.70, c: 0.17,  h: 25  },
   "cat-science":    { l: 0.78, c: 0.12,  h: 195 },
-  "neutral":        { l: 0.58, c: 0.005, h: 280 },
 };

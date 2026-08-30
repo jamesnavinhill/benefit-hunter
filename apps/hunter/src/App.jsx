@@ -23,9 +23,9 @@ export default function App() {
   const [statuses, setStatuses]           = useState({});
   const [profile, setProfile]             = useState(DEFAULT_PROFILE);
   const [profileOpen, setProfileOpen]     = useState(false);
+  const [settingsTab, setSettingsTab]     = useState("matching");
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [profileDoc, setProfileDoc]       = useState(DEFAULT_PROFILE_DOC);
-  const [openProfileSections, setOpenProfileSections] = useState(() => new Set());
   const [onlyForMe, setOnlyForMe]         = useState(false);
   const [search, setSearch]               = useState("");
   const [laneFilters, setLaneFilters]     = useState(() => new Set());
@@ -47,7 +47,6 @@ export default function App() {
   const [syncError, setSyncError] = useState("");
 
   const [accents, setAccents]             = useState(() => mergeAccents(null));
-  const [accentsOpen, setAccentsOpen]     = useState(false);
   const [accentsSavedFlash, setAccentsSavedFlash] = useState(false);
 
   // Toggle a key in a Set-typed filter state
@@ -112,7 +111,6 @@ export default function App() {
       setSyncStatus(isSupabaseConfigured ? "local" : "local-only");
       return;
     }
-
     let cancelled = false;
     const userId = session.user.id;
     setSyncStatus("loading");
@@ -259,12 +257,6 @@ export default function App() {
     await storage.set(STORAGE_VERSION + "-profileDoc", JSON.stringify(next));
   };
 
-  const toggleProfileSection = (key) => setOpenProfileSections(prev => {
-    const next = new Set(prev);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    return next;
-  });
-
   // Profile match lookup
   const profileMatchSet = useMemo(() =>
     new Set(PROGRAMS.filter(p => profileMatches(p, profile)).map(p => p.id))
@@ -410,23 +402,23 @@ export default function App() {
                     minWidth:160, padding:4,
                     boxShadow:"0 8px 24px rgba(0,0,0,0.6)",
                   }}>
-                    <button onClick={() => { setProfileMenuOpen(false); setProfileOpen(true); }} style={{
+                    <button onClick={() => { setProfileMenuOpen(false); setSettingsTab("matching"); setProfileOpen(true); }} style={{
                       display:"block", width:"100%", textAlign:"left",
                       background:"transparent", border:"none", color:"var(--text)",
                       padding:"7px 10px", cursor:"pointer", fontSize:10,
                       fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
                     }} onMouseEnter={e => e.currentTarget.style.background = "var(--line-soft)"}
                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                      ⚙  Profile
+                      ⚙  Settings
                     </button>
-                    <button onClick={() => { setProfileMenuOpen(false); setAccentsOpen(true); }} style={{
+                    <button onClick={() => { setProfileMenuOpen(false); setSettingsTab("appearance"); setProfileOpen(true); }} style={{
                       display:"block", width:"100%", textAlign:"left",
                       background:"transparent", border:"none", color:"var(--text)",
                       padding:"7px 10px", cursor:"pointer", fontSize:10,
                       fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
                     }} onMouseEnter={e => e.currentTarget.style.background = "var(--line-soft)"}
                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                      ◐  Colors
+                      ◐  Appearance
                     </button>
                     <div style={{
                       padding:"6px 10px", borderTop:"1px solid var(--line-soft)", marginTop:4,
@@ -540,7 +532,7 @@ export default function App() {
       {/* CONSOLIDATED STICKY FILTER ROW */}
       <div className="filter-row" style={{
         padding:"9px 22px", borderBottom:"1px solid var(--line-soft)",
-        position:"sticky", top:0, background:"rgba(7,7,10,0.97)", zIndex:10,
+        position:"sticky", top:0, background:"color-mix(in oklch, var(--bg) 94%, transparent)", zIndex:10,
         backdropFilter:"blur(8px)",
       }}>
         <MultiSelectDropdown
@@ -752,7 +744,7 @@ export default function App() {
       <div style={{
         borderTop:"1px solid var(--line-soft)", padding:"11px 22px",
         display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:8,
-        fontSize:8, color:"var(--line)", letterSpacing:"0.08em",
+        fontSize:8, color:"var(--text-dim2)", letterSpacing:"0.08em",
       }}>
         <span>BENEFIT HUNTER v5 // {PROGRAMS.length} BENEFITS // {VENDOR_COUNT} VENDORS</span>
         <span style={{ display:"flex", gap:14, alignItems:"center" }}>
@@ -772,15 +764,15 @@ export default function App() {
         }}>
           <div onClick={e => e.stopPropagation()} style={{
             background:"var(--surface-2)", border:"1px solid var(--line)", borderRadius:6,
-            width:"100%", maxWidth:880, padding:"20px 22px",
+            width:"100%", maxWidth:1040, overflow:"hidden",
             boxShadow:"0 16px 48px rgba(0,0,0,0.7)",
           }}>
             {/* Modal header */}
-            <div style={{ display:"flex", alignItems:"center", marginBottom:14, paddingBottom:10, borderBottom:"1px solid var(--line-soft)" }}>
+            <div style={{ display:"flex", alignItems:"center", padding:"16px 20px", borderBottom:"1px solid var(--line-soft)" }}>
               <div>
-                <div style={{ fontSize:14, fontWeight:700, color:"var(--text)", letterSpacing:"0.04em" }}>Profile</div>
+                <div style={{ fontSize:14, fontWeight:700, color:"var(--text)", letterSpacing:"0.04em" }}>Settings</div>
                 <div style={{ fontSize:9, color:"var(--text-dim2)", marginTop:2, letterSpacing:"0.04em" }}>
-                  Profile match rules + canonical application data
+                  Profile, application data, and appearance
                 </div>
               </div>
               <button onClick={() => setProfileOpen(false)} style={{
@@ -790,14 +782,43 @@ export default function App() {
               }}>✕</button>
             </div>
 
+            <div className="settings-layout">
+              <nav className="settings-nav" aria-label="Settings sections">
+                <div className="settings-section-label">Profile</div>
+                <button type="button" aria-selected={settingsTab === "matching"} onClick={() => setSettingsTab("matching")}>
+                  <span>★</span> Benefit Matching
+                </button>
+                {Object.entries(PROFILE_SCHEMA).map(([sectionKey, section]) => {
+                  const filled = section.fields.filter(f => profileDoc[f.key] && String(profileDoc[f.key]).trim()).length;
+                  return (
+                    <button key={sectionKey} type="button" aria-selected={settingsTab === sectionKey} onClick={() => setSettingsTab(sectionKey)}>
+                      <span style={{ color:section.color }}>●</span>
+                      <span>{section.title}</span>
+                      <span style={{ marginLeft:"auto", color:"var(--text-dim3)", fontSize:8 }}>{filled}/{section.fields.length}</span>
+                    </button>
+                  );
+                })}
+                <div className="settings-section-label">Interface</div>
+                <button type="button" aria-selected={settingsTab === "appearance"} onClick={() => setSettingsTab("appearance")}>
+                  <span>◐</span> Appearance
+                </button>
+              </nav>
+
+              <main className="settings-main">
+              {settingsTab === "matching" ? (
+                <>
+
             {/* Profile match checkboxes */}
             <div style={{ marginBottom:18 }}>
-              <div style={{ fontSize:9, color:"var(--text-dim2)", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:8 }}>
-                Match Benefits To Me
+              <div style={{ fontSize:15, color:"var(--text)", fontWeight:700, marginBottom:4 }}>
+                Benefit Matching
+              </div>
+              <div style={{ fontSize:10, color:"var(--text-dim)", lineHeight:1.5, marginBottom:14 }}>
+                Tell Benefit Hunter which access paths and requirements are available to you. This only powers “For Me” filtering—it does not hide opportunities by default.
               </div>
               <div style={{
-                padding:"12px 14px",
-                background:"var(--surface-2)", border:"1px solid var(--line-soft)", borderRadius:4,
+                padding:"16px 18px",
+                background:"var(--surface)", border:"1px solid var(--line)", borderRadius:4,
                 display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(180px, 1fr))", gap:8,
               }}>
                 {PROFILE_FIELDS.map(f => (
@@ -816,60 +837,29 @@ export default function App() {
                 ))}
               </div>
             </div>
-
-            {/* Application data sections */}
-            <div>
-              <div style={{
-                fontSize:9, color:"var(--text-dim2)", letterSpacing:"0.1em", textTransform:"uppercase",
-                marginBottom:8, display:"flex", alignItems:"baseline", gap:8,
-              }}>
-                Application Data
-                <span style={{ color:"var(--text-dim3)", textTransform:"none", letterSpacing:0, fontSize:9 }}>
-                  — canonical answer set agents pull from when drafting applications
-                </span>
-                <span style={{
-                  marginLeft:"auto", color:"var(--text-dim2)", fontFamily:"monospace", letterSpacing:0, textTransform:"none",
-                }}>
-                  {PROFILE_DOC_KEYS.filter(k => profileDoc[k] && String(profileDoc[k]).trim()).length} / {PROFILE_DOC_KEYS.length} filled
-                </span>
-              </div>
-              {Object.entries(PROFILE_SCHEMA).map(([sectionKey, section]) => {
-                const sectionOpen = openProfileSections.has(sectionKey);
-                const sectionFilled = section.fields.filter(f => profileDoc[f.key] && String(profileDoc[f.key]).trim()).length;
-                const sectionTotal = section.fields.length;
-                const ratioColor = sectionFilled === sectionTotal ? "var(--match)" : sectionFilled > 0 ? "var(--wait)" : "var(--text-dim2)";
-                return (
-                  <div key={sectionKey} style={{ marginBottom:6, border:"1px solid var(--line-soft)", borderRadius:3 }}>
-                    <div onClick={() => toggleProfileSection(sectionKey)} style={{
-                      padding:"7px 12px", cursor:"pointer",
-                      display:"flex", alignItems:"center", gap:8,
-                      background: sectionOpen ? "var(--surface-2)" : "transparent",
-                      borderBottom: sectionOpen ? "1px solid var(--line-soft)" : "none",
-                      borderRadius:"3px 3px 0 0",
-                    }}>
-                      <span style={{ fontSize:9, color:"var(--text-dim3)" }}>{sectionOpen ? "▼" : "▶"}</span>
-                      <span style={{ fontSize:10, color: section.color, fontWeight:600, letterSpacing:"0.05em" }}>{section.title}</span>
-                      <span style={{ fontSize:9, color: ratioColor, marginLeft:"auto", fontFamily:"monospace" }}>
-                        {sectionFilled} / {sectionTotal}
-                      </span>
-                    </div>
-                    {sectionOpen && (
-                      <div style={{
-                        padding:"10px 12px",
-                        display:"grid",
-                        gridTemplateColumns:"repeat(auto-fill, minmax(220px, 1fr))",
-                        gap:10,
-                      }}>
-                        {section.fields.map(field => {
+                </>
+              ) : PROFILE_SCHEMA[settingsTab] ? (
+                <>
+                  <div style={{ display:"flex", alignItems:"baseline", gap:10, marginBottom:5 }}>
+                    <div style={{ fontSize:15, color:"var(--text)", fontWeight:700 }}>{PROFILE_SCHEMA[settingsTab].title}</div>
+                    <span style={{ color:"var(--text-dim2)", fontSize:9 }}>
+                      {PROFILE_SCHEMA[settingsTab].fields.filter(f => profileDoc[f.key] && String(profileDoc[f.key]).trim()).length} / {PROFILE_SCHEMA[settingsTab].fields.length} filled
+                    </span>
+                  </div>
+                  <div style={{ fontSize:10, color:"var(--text-dim)", lineHeight:1.5, marginBottom:18 }}>
+                    Canonical application data used when drafting benefit applications.
+                  </div>
+                  <div className="settings-form-grid">
+                        {PROFILE_SCHEMA[settingsTab].fields.map(field => {
                           const val = profileDoc[field.key] || "";
                           const sty = {
-                            background:"var(--surface-2)", border:"1px solid var(--line)", color:"var(--text)",
-                            padding:"5px 8px", borderRadius:2, fontSize:10,
+                            background:"var(--surface)", border:"1px solid var(--line)", color:"var(--text)",
+                            padding:"8px 10px", borderRadius:3, fontSize:11,
                             fontFamily:"inherit", outline:"none", width:"100%", boxSizing:"border-box",
                           };
                           return (
-                            <label key={field.key} style={{ display:"flex", flexDirection:"column", gap:3 }}>
-                              <span style={{ fontSize:9, color: val ? "var(--text-dim)" : "var(--text-dim2)", letterSpacing:"0.04em" }}>
+                            <label key={field.key} style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                              <span style={{ fontSize:10, color: val ? "var(--text)" : "var(--text-dim)", letterSpacing:"0.02em" }}>
                                 {field.label}
                               </span>
                               {field.type === "textarea" ? (
@@ -878,7 +868,7 @@ export default function App() {
                                   onChange={e => updateProfileDoc(field.key, e.target.value)}
                                   placeholder={field.placeholder || ""}
                                   rows={3}
-                                  style={{ ...sty, resize:"vertical", minHeight:50, fontFamily:"inherit" }}
+                                  style={{ ...sty, resize:"vertical", minHeight:76, fontFamily:"inherit" }}
                                 />
                               ) : field.type === "select" ? (
                                 <select
@@ -900,12 +890,7 @@ export default function App() {
                             </label>
                           );
                         })}
-                      </div>
-                    )}
                   </div>
-                );
-              })}
-            </div>
 
             {/* Modal footer — manual save */}
             <div style={{
@@ -913,7 +898,7 @@ export default function App() {
               display:"flex", alignItems:"center", gap:10, flexWrap:"wrap",
             }}>
               <button onClick={handleManualSave} style={{
-                background:"var(--ok)", color:"#080807", border:"none",
+                background:"var(--ok)", color:"var(--action-text)", border:"none",
                 borderRadius:3, padding:"7px 18px", cursor:"pointer",
                 fontSize:11, fontWeight:700, fontFamily:"monospace",
                 letterSpacing:"0.1em", textTransform:"uppercase",
@@ -931,20 +916,24 @@ export default function App() {
                 {signedInUser ? "Changes also save automatically" : "Saved locally on this device"}
               </span>
             </div>
+                </>
+              ) : (
+                <AccentsModal
+                  embedded
+                  open
+                  accents={accents}
+                  onChange={setAccents}
+                  onClose={() => setProfileOpen(false)}
+                  onSave={handleAccentsSave}
+                  onResetAll={handleAccentsResetAll}
+                  savedFlash={accentsSavedFlash}
+                />
+              )}
+              </main>
+            </div>
           </div>
         </div>
       )}
-
-      {/* COLORS MODAL */}
-      <AccentsModal
-        open={accentsOpen}
-        accents={accents}
-        onChange={setAccents}
-        onClose={() => setAccentsOpen(false)}
-        onSave={handleAccentsSave}
-        onResetAll={handleAccentsResetAll}
-        savedFlash={accentsSavedFlash}
-      />
     </div>
   );
 }

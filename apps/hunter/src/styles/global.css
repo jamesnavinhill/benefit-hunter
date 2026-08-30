@@ -8,6 +8,21 @@
 body {
   margin: 0;
   background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input,
+select,
+textarea {
+  color-scheme: dark;
+}
+
+[data-theme="light"] button,
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  color-scheme: light;
 }
 
 ::-webkit-scrollbar {
@@ -116,6 +131,75 @@ body {
 .shell {
   max-width: 1280px;
   margin: 0 auto;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  min-height: 560px;
+}
+
+.settings-nav {
+  padding: 18px 12px;
+  border-right: 1px solid var(--line-soft);
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+.settings-nav button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 5px;
+  padding: 10px 11px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  font: 600 11px monospace;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-nav button[aria-selected="true"] {
+  border-color: var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.settings-main {
+  min-width: 0;
+  padding: 22px 26px 24px;
+}
+
+.settings-section-label {
+  padding: 12px 11px 6px;
+  color: var(--text-dim3);
+  font: 700 8px monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+@media (max-width: 700px) {
+  .settings-layout { grid-template-columns: 1fr; min-height: 0; }
+  .settings-nav {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .settings-nav button { width: auto; margin: 0; }
+  .settings-section-label { display: none; }
+  .settings-main { padding: 18px 16px 20px; }
+  .settings-form-grid { grid-template-columns: 1fr; }
 }
 
 /* Filter row — CSS Grid, single column system shared across all breakpoints.

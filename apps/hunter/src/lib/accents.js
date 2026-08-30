@@ -13,10 +13,14 @@ export const DEFAULT_THEME = "dark";
 export function applyAccents(accents) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
-  root.dataset.theme = accents?._theme || DEFAULT_THEME;
+  const theme = accents?._theme || DEFAULT_THEME;
+  root.dataset.theme = theme;
   for (const key of TOKEN_ORDER) {
     const val = accents?.[key];
-    if (val) root.style.setProperty(`--${key}`, oklchString(val));
+    // The editor stores one palette. On light surfaces, cap lightness so the
+    // same chosen hues remain legible as text, borders, and status signals.
+    const themed = val && theme === "light" ? { ...val, l: Math.min(val.l, 0.48) } : val;
+    if (themed) root.style.setProperty(`--${key}`, oklchString(themed));
     else root.style.removeProperty(`--${key}`);
   }
 }

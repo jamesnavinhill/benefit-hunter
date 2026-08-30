@@ -29,7 +29,7 @@ function Slider({ label, min, max, step, value, onChange }) {
   );
 }
 
-export function AccentsModal({ open, accents, onChange, onClose, onSave, onResetAll, savedFlash }) {
+export function AccentsModal({ open, embedded = false, accents, onChange, onClose, onSave, onResetAll, savedFlash }) {
   const [active, setActive] = useState("accent");
   const initial = useRef(accents);
 
@@ -48,12 +48,12 @@ export function AccentsModal({ open, accents, onChange, onClose, onSave, onReset
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  if (!open) return null;
-
   const current = accents[active] || DEFAULT_ACCENTS[active];
   const isDefault = useMemo(() => (
     JSON.stringify(current) === JSON.stringify(DEFAULT_ACCENTS[active])
   ), [current, active]);
+
+  if (!open) return null;
 
   const updateActive = (patch) => {
     onChange({ ...accents, [active]: { ...current, ...patch } });
@@ -70,16 +70,24 @@ export function AccentsModal({ open, accents, onChange, onClose, onSave, onReset
   };
 
   return (
-    <div onClick={handleCancel} style={{
-      position:"fixed", inset:0, zIndex:120,
-      background:"rgba(0,0,0,0.65)", backdropFilter:"blur(3px)",
-      display:"flex", alignItems:"flex-start", justifyContent:"center",
-      padding:"40px 20px", overflowY:"auto",
+    <div onClick={embedded ? undefined : handleCancel} style={{
+      ...(embedded ? {
+        position:"static",
+      } : {
+        position:"fixed", inset:0, zIndex:120,
+        background:"rgba(0,0,0,0.65)", backdropFilter:"blur(3px)",
+        display:"flex", alignItems:"flex-start", justifyContent:"center",
+        padding:"40px 20px", overflowY:"auto",
+      }),
     }}>
       <div onClick={e => e.stopPropagation()} style={{
-        background:"var(--surface-2)", border:"1px solid var(--line)", borderRadius:6,
-        width:"100%", maxWidth:780, padding:"20px 22px",
-        boxShadow:"0 16px 48px rgba(0,0,0,0.7)",
+        ...(embedded ? {
+          width:"100%",
+        } : {
+          background:"var(--surface-2)", border:"1px solid var(--line)", borderRadius:6,
+          width:"100%", maxWidth:780, padding:"20px 22px",
+          boxShadow:"0 16px 48px rgba(0,0,0,0.7)",
+        }),
       }}>
         {/* Header */}
         <div style={{ display:"flex", alignItems:"center", marginBottom:14, paddingBottom:10, borderBottom:"1px solid var(--line-soft)" }}>
@@ -112,11 +120,13 @@ export function AccentsModal({ open, accents, onChange, onClose, onSave, onReset
                 );
               })}
             </div>
-            <button onClick={handleCancel} style={{
-              background:"transparent", border:"1px solid var(--line)",
-              color:"var(--text-dim)", borderRadius:3, padding:"4px 10px", cursor:"pointer",
-              fontSize:11, fontFamily:"monospace", lineHeight:1,
-            }}>✕</button>
+            {!embedded && (
+              <button onClick={handleCancel} style={{
+                background:"transparent", border:"1px solid var(--line)",
+                color:"var(--text-dim)", borderRadius:3, padding:"4px 10px", cursor:"pointer",
+                fontSize:11, fontFamily:"monospace", lineHeight:1,
+              }}>✕</button>
+            )}
           </div>
         </div>
 
@@ -228,7 +238,7 @@ export function AccentsModal({ open, accents, onChange, onClose, onSave, onReset
               fontSize:10, fontFamily:"monospace", letterSpacing:"0.08em", textTransform:"uppercase",
             }}>Cancel</button>
             <button onClick={onSave} style={{
-              background:"var(--ok)", color:"#080807", border:"none",
+              background:"var(--ok)", color:"var(--action-text)", border:"none",
               borderRadius:3, padding:"7px 18px", cursor:"pointer",
               fontSize:11, fontWeight:700, fontFamily:"monospace",
               letterSpacing:"0.1em", textTransform:"uppercase",
