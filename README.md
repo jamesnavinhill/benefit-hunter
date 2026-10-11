@@ -4,20 +4,23 @@ A free tool and setup kit that helps founders find, qualify for, and apply to st
 benefit programs — credits, community licenses, and worthy discounts — and apply to
 them in the order that maximizes referral leverage.
 
-Live at **[benefits.jami.studio](https://benefits.jami.studio)**. Built and maintained
-by [Jami Studio](https://www.jami.studio).
+Live at **[benefit-hunter.vercel.app](https://benefit-hunter.vercel.app)**.
 
 ## What it does
 
 - **Finds** programs and matches them against a lightweight profile so you see the
   specific benefits — and total dollar value — you qualify for.
-- **Guides** an umbrella-first application order (multi-vendor packs and referral hubs
-  first) so one acceptance unlocks the next.
+- **Guides** an umbrella-first application order via the Guided view (strategy tiers:
+  multi-vendor packs and referral hubs first) so one acceptance unlocks the next.
+- **Quick Draft (AI)**: per-program AI-generated application packets (serverless proxy to
+  the Agency gateway's free models) — drafts follow the example-copy skeleton, copy to
+  clipboard in one click. Unfilled profile fields stay as visible `{{placeholders}}`.
 - **Provides** de-identified example application copy you can adapt — or hand to your
   own coding agent to redraft for your project.
-- **Shows** the real dollar value Jami Studio actually secured, organized by stack.
+- **Shows** the real dollar value secured, organized by stack.
 
-Runs entirely in your browser with local storage. No account required.
+Runs entirely in your browser with local storage. No account required. Optional
+Supabase auth syncs your profile + statuses across devices.
 
 ## Repository layout
 
@@ -26,8 +29,9 @@ apps/hunter/   # the Benefit Hunter web app (Vite/React static site)
 docs/          # durable docs, architecture, and dated roadmaps
 ```
 
-Start with [docs/README.md](./docs/README.md) for the product vision, architecture,
-and build roadmaps.
+Start with [docs/README.md](./docs/README.md) for the product vision and architecture.
+The optional automation kit (`/automation-kit/`) ships a sanitized starter repo —
+personal artifacts are redacted to `{{placeholders}}` before the zip is built.
 
 ## Development
 

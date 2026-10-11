@@ -2,7 +2,7 @@
 
 Durable documentation for **Benefit Hunter** — a free public tool and setup kit that
 helps founders find, qualify for, and apply to startup benefit programs (credits,
-community licenses, discounts). It runs at `benefits.jami.studio` and acts as a
+community licenses, discounts). It runs on Vercel (`benefit-hunter.vercel.app`) and acts as a
 free marketing funnel into Jami Studio.
 
 This `docs/` tree is the durable operating layer. The live app under `apps/hunter`
@@ -21,9 +21,9 @@ active build sequence.
 | Product | [product/automation-kit-guide.md](./product/automation-kit-guide.md) | Self-serve setup guide for the optional Google Apps Script registry-sync add-on. |
 | Architecture | [architecture/repo-and-monorepo.md](./architecture/repo-and-monorepo.md) | Monorepo shape, app naming, what is public vs private, reorg from the admin tree. |
 | Architecture | [architecture/data-and-truth-model.md](./architecture/data-and-truth-model.md) | Catalog schema, `active-credits` as source of truth, the unverified-claimed corral, the real-dollars-by-stack view. |
-| Operations | [operations/deployment-and-domains.md](./operations/deployment-and-domains.md) | GitHub `studio-jami`, Vercel Jami Studio team, `benefits.jami.studio`, build config, redirects. |
+| Operations | [operations/deployment-and-domains.md](./operations/deployment-and-domains.md) | GitHub `jamesnavinhill/benefit-hunter`, Vercel, build config, redirects. |
 | Security | [security/privacy-and-secrets.md](./security/privacy-and-secrets.md) | Public-repo secret policy, gitignore rules, example templatization/redaction rules. |
-| Roadmaps | [roadmaps/](./roadmaps) | Dated, active implementation plans. Retire to `_legacy/roadmaps/` when done. |
+| Roadmaps | [roadmaps/](./roadmaps) | (Currently empty — active plans live in session notes.) |
 
 ## Build phases
 

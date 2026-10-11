@@ -24,6 +24,32 @@ function statusChip({ program, profileDoc }) {
 
 export function ProgramCard({ program, status, onStatusChange, onVendorClick, profileDoc }) {
   const [botOpen, setBotOpen] = useState(false);
+
+  // Quick Draft: AI-generated application packet (gateway-backed serverless fn)
+  const [draftText, setDraftText] = useState(null);
+  const [drafting, setDrafting] = useState(false);
+  const [draftError, setDraftError] = useState(null);
+
+  const handleQuickDraft = async () => {
+    if (drafting) return;
+    setDrafting(true);
+    setDraftError(null);
+    try {
+      const res = await fetch("/api/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ program, profile: profileDoc || {} }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.draft) throw new Error(data.error || `Draft failed (${res.status}).`);
+      setDraftText(data.draft);
+      if (navigator.clipboard) navigator.clipboard.writeText(data.draft).catch(() => {});
+    } catch (err) {
+      setDraftError(err instanceof Error ? err.message : "Draft failed.");
+    } finally {
+      setDrafting(false);
+    }
+  };
   const lc = LANE_COLORS[program.lane];
   const sc = STATUS_CONFIG[status];
   const ag = agentState(program);
@@ -215,6 +241,25 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
               }}>
                 Copy as JSON
               </button>
+              <button onClick={(e) => {
+                e.stopPropagation();
+                handleQuickDraft();
+              }} disabled={drafting} style={{
+                marginTop:6, marginLeft:6, background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim)",
+                padding:"3px 10px", borderRadius:2, cursor: drafting ? "wait" : "pointer", fontSize:9,
+                fontFamily:"monospace", letterSpacing:"0.05em", opacity: drafting ? 0.5 : 1,
+              }}>
+                {drafting ? "Drafting…" : "✎ Quick Draft (AI)"}
+              </button>
+              {draftError && (
+                <div style={{ marginTop:6, color:"var(--stop)", fontSize:9 }}>{draftError}</div>
+              )}
+              {draftText && (
+                <div style={{ marginTop:8, paddingTop:8, borderTop:"1px solid var(--line-soft)" }}>
+                  <div style={{ color:"var(--text-dim)", fontWeight:700, marginBottom:5, letterSpacing:"0.08em" }}>// AI DRAFT (copied to clipboard)</div>
+                  <pre style={{ whiteSpace:"pre-wrap", color:"var(--text-dim2)", fontSize:8.5, margin:0, maxHeight:260, overflowY:"auto" }}>{draftText}</pre>
+                </div>
+              )}
             </div>
           )}
         </div>

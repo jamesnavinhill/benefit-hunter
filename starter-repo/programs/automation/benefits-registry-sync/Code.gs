@@ -12,7 +12,7 @@
  *
  * This runs entirely inside YOUR Google account. The only outbound call is to
  * Google's Gemini API, authenticated with a key you control. Nothing is sent
- * to Jami Studio or any third party.
+ * to {{your_org}} or any third party.
  *
  * Full setup guide: see README.md in this folder, or the detailed walkthrough
  * at docs/product/automation-kit-guide.md in the Benefit Hunter repository.

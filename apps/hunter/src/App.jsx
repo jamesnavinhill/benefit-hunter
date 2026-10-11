@@ -14,6 +14,7 @@ import { MultiSelectDropdown } from "./components/MultiSelectDropdown";
 import { SingleSelectDropdown } from "./components/SingleSelectDropdown";
 import { ProgramCard } from "./components/ProgramCard";
 import { ProofView } from "./components/ProofView";
+import { GuidedView } from "./components/GuidedView";
 import { Stat } from "./components/Stat";
 import { AccentsModal } from "./components/AccentsModal";
 import { applyAccents, clearLocalAccents, loadLocalAccents, mergeAccents, saveLocalAccents } from "./lib/accents";
@@ -353,6 +354,14 @@ export default function App() {
               fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
               display:"inline-flex", alignItems:"center", gap:5, minHeight:28,
             }}>★<span className="btn-for-me-text">For Me</span></button>
+            <button onClick={() => setViewMode(v => v === "guided" ? "grid" : "guided")} title="Strategy-tier guided flow: umbrella packs first, then quick applies, then drafts" style={{
+              background: viewMode === "guided" ? "color-mix(in oklch, var(--match) 14%, transparent)" : "transparent",
+              border:"1px solid " + (viewMode === "guided" ? "color-mix(in oklch, var(--match) 40%, transparent)" : "var(--line)"),
+              color: viewMode === "guided" ? "var(--match)" : "var(--text-dim)",
+              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:10,
+              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
+              display:"inline-flex", alignItems:"center", gap:5, minHeight:28,
+            }}>☰<span className="btn-for-me-text">Guided</span></button>
             <button onClick={() => setViewMode(v => v === "proof" ? "grid" : "proof")} title="Real dollars secured, by stack lane" style={{
               background: viewMode === "proof" ? "color-mix(in oklch, var(--gold) 14%, transparent)" : "transparent",
               border:"1px solid " + (viewMode === "proof" ? "color-mix(in oklch, var(--gold) 40%, transparent)" : "var(--line)"),
@@ -617,6 +626,15 @@ export default function App() {
       <div style={{ padding:"14px 22px 48px" }}>
         {!loaded ? (
           <div style={{ textAlign:"center", padding:"60px 0", color:"var(--line)", fontSize:10 }}>Loading...</div>
+        ) : viewMode === "guided" ? (
+          <GuidedView
+            programs={filtered}
+            statuses={statuses}
+            onStatusChange={updateStatus}
+            profileMatchSet={profileMatchSet}
+            profileDoc={profileDoc}
+            onVendorClick={(v) => setSearch(v)}
+          />
         ) : viewMode === "proof" ? (
           <ProofView />
         ) : filtered.length === 0 ? (

@@ -1,10 +1,10 @@
-# ElevenLabs Startup Grants - Jami Studio Application
+# ElevenLabs Startup Grants - {{your_org}} Application
 
 > This is a real, sanitized example — shown so you (or an agent you point at
 > this file) can see what a strong application looks like and write your own
 > equivalent. It's not a fill-in-the-blank template to submit as-is.
 
-**Apply as:** Jami Studio
+**Apply as:** {{your_org}}
 **Founder:** [Your Name]
 **Status:** Active development, long-term product intent
 **Referral code:** `[YOUR-REFERRAL-CODE]` (if applying via a partner pack — optional)
@@ -21,13 +21,13 @@ The sections below show the structure and tone a strong application uses — ada
 
 ### Recommended version
 
-**Jami Studio** is an agent-native platform for building and running governed AI agents, with voice as the main interaction layer.
+**{{your_org}}** is an agent-native platform for building and running governed AI agents, with voice as the main interaction layer.
 
-Most agent products still feel like chat with extra steps. We're building something different: a real-time, human-sounding voice supervisor that keeps a natural conversation going while real work runs in the background. The agent dispatches tasks to a governed runtime (the Jami Harness), monitors progress, narrates updates, and takes mid-flight corrections without the user ever feeling like they left the conversation.
+Most agent products still feel like chat with extra steps. We're building something different: a real-time, human-sounding voice supervisor that keeps a natural conversation going while real work runs in the background. The agent dispatches tasks to a governed runtime (the {{your_product}}), monitors progress, narrates updates, and takes mid-flight corrections without the user ever feeling like they left the conversation.
 
-The platform includes the **Jami Agent SDK** (governed runtime, BYOK/self-host), **Studio UI Registry** (tokenized, agent-native components), **Orchestra** (multi-agent coordination), **Intercal** (provenance-backed knowledge substrate), and **Collectiva** (open agent society). Together they form a full stack for voice-first agent applications.
+The platform includes the **{{your_product_sdk}}** (governed runtime, BYOK/self-host), **{{your_product_5}}** (tokenized, agent-native components), **{{your_product_2}}** (multi-agent coordination), **{{your_product_3}}** (provenance-backed knowledge substrate), and **{{your_product_4}}** (open agent society). Together they form a full stack for voice-first agent applications.
 
-We're building open-core: a capable, fully open foundation plus a **commercial lane** for hosted agents, managed infrastructure, enterprise governance, and curated production tooling. Jami Studio is the home for both. We're in active development now, but this is a long-term product we're taking to market, not a demo or one-off.
+We're building open-core: a capable, fully open foundation plus a **commercial lane** for hosted agents, managed infrastructure, enterprise governance, and curated production tooling. {{your_org}} is the home for both. We're in active development now, but this is a long-term product we're taking to market, not a demo or one-off.
 
 **ElevenLabs is our planned primary voice layer** for Conversational AI Agents, TTS, voice design, and custom voice training. Voice quality is the product. ElevenLabs is the bar we want to build to.
 
@@ -35,7 +35,7 @@ We're building open-core: a capable, fully open foundation plus a **commercial l
 
 ### Shorter (if character-limited)
 
-Jami Studio is an open-core agent platform where the main interface is a real-time voice agent that sounds human, holds conversation, and supervises real work in the background via our governed Harness runtime.
+{{your_org}} is an open-core agent platform where the main interface is a real-time voice agent that sounds human, holds conversation, and supervises real work in the background via our governed Harness runtime.
 
 We're building the full stack: agent runtime, UI registry, orchestration, knowledge substrate, and agent governance. Open foundation, commercial hosted/managed lane on top. Active development, long-term commercial intent.
 
@@ -47,9 +47,9 @@ ElevenLabs will be our primary voice stack for conversational agents, narration,
 
 ### Recommended version
 
-I'm **[Your Name]**, solo technical founder of Jami Studio.
+I'm **[Your Name]**, solo technical founder of {{your_org}}.
 
-I'm building the full agent platform myself right now, with an agent-orchestrated development system (Orchestra) that lets one person move like a small team. Specialized agents handle research, planning, implementation, docs, and ops while I own architecture, product direction, and the hard integration decisions.
+I'm building the full agent platform myself right now, with an agent-orchestrated development system ({{your_product_2}}) that lets one person move like a small team. Specialized agents handle research, planning, implementation, docs, and ops while I own architecture, product direction, and the hard integration decisions.
 
 This isn't a slide-deck startup. There are real repos, production-shaped architecture docs, working subsystems, and a multi-provider voice evaluation already behind us. Pre-team by choice at this stage. Hiring into a system that already works, not a prototype. Voice is the interface we're designing around from day one, which is why ElevenLabs matters so much to us.
 
@@ -64,7 +64,7 @@ Paste if there's a free-text "how will you use our platform?" field:
 - **Speech-to-Text** in the voice interaction loop
 - **Voice Design + Voice Cloning** for Studio-branded agent personas
 - Integration behind a voice adapter in the Harness so ElevenLabs is the default production path
-- Dogfooding voice across Orchestra (internal dev agent) and the public Harness/Studio experience
+- Dogfooding voice across {{your_product_2}} (internal dev agent) and the public Harness/Studio experience
 
 The goal: users forget they're talking to software. ElevenLabs gets us closest to that.
 

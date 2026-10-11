@@ -1,7 +1,7 @@
 # Partner Credit And Benefit Map
 
 Status: active source  
-Owner: Jami Studio
+Owner: {{your_org}}
 
 The live status, evidence, redemption links, exact terms, and application queue stay in the startup-program inventory under `_ops/admin/programs`. This map answers a different question: which responsibility lane each credit can power, and how it should influence GTM/system strategy.
 
@@ -19,9 +19,9 @@ The live status, evidence, redemption links, exact terms, and application queue 
 | --- | --- | --- | --- |
 | Source, CI, security | GitHub for Startups, Copilot, Advanced Security, Actions. | Public OSS credibility, contribution workflow, verification, agent coding power. | High priority; claim as soon as welcome/access lands. |
 | Edge hosting and web surfaces | Cloudflare, Vercel. | Static marketing/docs surfaces, waitlist, web demos, lightweight workers. | Use for public surfaces; keep deployment portable. |
-| Batch compute and reference deploys | DigitalOcean, RunPod, NVIDIA partner credits, Nebius paths. | Intercal workers, eval jobs, demos, GPU experiments. | Use after workloads exist; avoid idle burn. |
+| Batch compute and reference deploys | DigitalOcean, RunPod, NVIDIA partner credits, Nebius paths. | {{your_product_3}} workers, eval jobs, demos, GPU experiments. | Use after workloads exist; avoid idle burn. |
 | Data stores | Neon, Supabase, Snowflake, Confluent. | Product data, event streams, future analytics plane. | OLTP first; streaming/warehouse only when event volume justifies. |
-| Search and retrieval | Algolia, Massive, Reducto, Snowflake where relevant. | Docs/site search, registry search, document parsing, Intercal ingestion. | Activate against real corpus and indexing plan. |
+| Search and retrieval | Algolia, Massive, Reducto, Snowflake where relevant. | Docs/site search, registry search, document parsing, {{your_product_3}} ingestion. | Activate against real corpus and indexing plan. |
 | Dev inference and coding power | Anthropic, OpenAI/Ramp, Groq, Together, Fireworks, OpenRouter, xAI, Cerebras, Hugging Face. | Agent coding, evals, product demos, model routing tests, synthesis. | Highest near-term gap; prioritize credits that expand SOTA access. |
 | Voice, avatar, and media | ElevenLabs, Anam, Mux, media-generation providers. | Conversational supervisor demos, voice/avatar showcase, launch media. | Use when demo surface is ready; avoid vanity demos. |
 | Product analytics | PostHog, Amplitude, Confidence/Snowflake path. | Activation, funnel, telemetry, feature validation. | Active once consent-safe events exist. |
@@ -47,7 +47,7 @@ The live status, evidence, redemption links, exact terms, and application queue 
 | GitHub startup access | Improves OSS operations, security posture, and agent coding capacity. |
 | Support AI credits | Lets hosted support scale without making James the queue. |
 | Automation credits | Turns registry, evidence, burn-down, and launch chores into durable workflows. |
-| Search/retrieval credits | Powers docs, registry, Intercal ingestion, and agent-grounded knowledge surfaces. |
+| Search/retrieval credits | Powers docs, registry, {{your_product_3}} ingestion, and agent-grounded knowledge surfaces. |
 
 ## Burn-down rules
 

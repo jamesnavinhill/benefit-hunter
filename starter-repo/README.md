@@ -1,9 +1,9 @@
 # Benefits Tracker — Starter Repo
 
 A copy-paste template for tracking startup credits, free tiers, and partner
-discounts for your own company. This is the same `programs/` tree Jami Studio
+discounts for your own company. This is the same `programs/` tree {{your_org}}
 uses internally for Benefit Hunter. Every example in here is a real,
-sanitized recreation of Jami Studio's own material (mostly ElevenLabs, plus
+sanitized recreation of {{your_org}}'s own material (mostly ElevenLabs, plus
 GitHub for the identity-map example) — personal info and redeemable codes
 stripped, everything else intact — no invented placeholder companies.
 
@@ -24,5 +24,5 @@ programs/
   tools/                         your own one-off scripts, none shipped (infra-specific)
 ```
 
-`programs/` mirrors Jami Studio's actual internal tracker 1:1 — same folders,
+`programs/` mirrors {{your_org}}'s actual internal tracker 1:1 — same folders,
 same purpose, real content sanitized rather than invented.

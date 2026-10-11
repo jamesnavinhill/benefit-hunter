@@ -1,4 +1,4 @@
-# Jami Studio - Application Use Cases & Reference
+# {{your_org}} - Application Use Cases & Reference
 
 **Purpose:** Durable reference for startup programs, credit applications, grants, vendor intros, and follow-ups. Contains short + long styles for common sections. Used as the source for the ElevenLabs application/follow-up examples in this same directory.
 
@@ -14,18 +14,18 @@
 
 ### Short (1-2 sentences, for tight form fields)
 
-Jami Studio is an agent-native platform for building and running governed AI agents, with voice as the primary interaction layer. The core is the Jami Agent Harness: a production-grade, self-hostable runtime for planning, tool use, and execution, paired with a real-time voice supervisor that keeps natural conversation going while complex work runs in the background.
+{{your_org}} is an agent-native platform for building and running governed AI agents, with voice as the primary interaction layer. The core is the {{your_core_runtime}}: a production-grade, self-hostable runtime for planning, tool use, and execution, paired with a real-time voice supervisor that keeps natural conversation going while complex work runs in the background.
 
 ### Long (detailed paragraph, for "Share more details", "About us", or longer summaries)
 
-Jami Studio is an open-core agent-native platform for governed, self-hostable AI agents. The foundation is the Jami Agent Harness: a multi-provider runtime that gives developers full control over policies, memory, tools, observability, and model routing. On top sits a real-time conversational voice supervisor that holds natural, barge-in-capable dialogue with users while dispatching tasks, monitoring progress, narrating updates, and taking mid-flight corrections - all without the user ever feeling like they left the conversation.
+{{your_org}} is an open-core agent-native platform for governed, self-hostable AI agents. The foundation is the {{your_core_runtime}}: a multi-provider runtime that gives developers full control over policies, memory, tools, observability, and model routing. On top sits a real-time conversational voice supervisor that holds natural, barge-in-capable dialogue with users while dispatching tasks, monitoring progress, narrating updates, and taking mid-flight corrections - all without the user ever feeling like they left the conversation.
 
 The full stack includes:
-- **Jami Agent Harness** (governed runtime, BYOK/self-host)
-- **Studio UI Registry** (tokenized, agent-native components and trusted render contract)
-- **Orchestra** (multi-agent coordination + our internal agent-orchestrated development system)
-- **Intercal** (provenance-backed temporal knowledge substrate for high-quality, citable grounding)
-- **Collectiva** (open agent governance layer)
+- **{{your_core_runtime}}** (governed runtime, BYOK/self-host)
+- **{{your_product_5}}** (tokenized, agent-native components and trusted render contract)
+- **{{your_product_2}}** (multi-agent coordination + our internal agent-orchestrated development system)
+- **{{your_product_3}}** (provenance-backed temporal knowledge substrate for high-quality, citable grounding)
+- **{{your_product_4}}** (open agent governance layer)
 
 We're building open-core foundations today with a commercial hosted lane (managed agents, enterprise governance, production support) planned. This is a long-term product family, not a campaign. Active development with real repos, architecture docs, verification, and dogfooding already in place.
 
@@ -35,32 +35,32 @@ We're building open-core foundations today with a commercial hosted lane (manage
 
 ### Short style (tight form fields, "short summary", "quick use case")
 
-We build a voice-first governed agent platform. Fast inference powers the real-time voice supervisor (intent understanding, planning, natural narration, and corrections during live conversations) plus live multi-step agent execution inside the Jami Harness (planning, tool calling, orchestration). We also run high-volume batch pipelines in Intercal for provenance-backed knowledge synthesis (ingestion, entity extraction, temporal claims, summarization, contradiction detection) and use fast models heavily for agent evals, synthetic data, multi-agent coordination in Orchestra, and internal development dogfooding. We route deliberately: frontier models for hard reasoning, fast open models for volume, latency, and cost at scale.
+We build a voice-first governed agent platform. Fast inference powers the real-time voice supervisor (intent understanding, planning, natural narration, and corrections during live conversations) plus live multi-step agent execution inside the {{your_product}} (planning, tool calling, orchestration). We also run high-volume batch pipelines in {{your_product_3}} for provenance-backed knowledge synthesis (ingestion, entity extraction, temporal claims, summarization, contradiction detection) and use fast models heavily for agent evals, synthetic data, multi-agent coordination in {{your_product_2}}, and internal development dogfooding. We route deliberately: frontier models for hard reasoning, fast open models for volume, latency, and cost at scale.
 
 ### Long / detailed style (main "Share more details about your use case" sections)
 
 We are building a voice-first agent platform where inference is central to both the user-facing experience and the underlying systems.
 
 **Core product surface - real-time voice supervisor:**
-A conversational agent holds natural dialogue with the user (STT → understanding → planning → TTS narration and responses) while dispatching and monitoring actual work in the governed Jami Harness runtime in the background. This requires low-latency, high-quality inference for intent classification, dynamic planning, tool selection, progress narration, and mid-conversation corrections/barge-in handling.
+A conversational agent holds natural dialogue with the user (STT → understanding → planning → TTS narration and responses) while dispatching and monitoring actual work in the governed {{your_product}} runtime in the background. This requires low-latency, high-quality inference for intent classification, dynamic planning, tool selection, progress narration, and mid-conversation corrections/barge-in handling.
 
 **Live agent execution in the Harness:**
 Complex, multi-step planning, tool calling, state management, retries, handoffs, and execution for agents the user has launched. These can be long-running or highly parallel. The runtime must feel responsive even when heavy work is happening.
 
 **On-the-fly grounding and synthesis:**
-During conversations and agent runs, agents pull relevant, temporally-aware, provenance-backed knowledge from Intercal for accurate, citable answers and decisions.
+During conversations and agent runs, agents pull relevant, temporally-aware, provenance-backed knowledge from {{your_product_3}} for accurate, citable answers and decisions.
 
-**Knowledge corpus building (Intercal pipelines):**
+**Knowledge corpus building ({{your_product_3}} pipelines):**
 Continuous large-scale batch workloads ingesting web sources, papers, and data; entity extraction; temporal claim synthesis; summarization; contradiction detection; and historical backfilling. Thousands of LLM calls per batch to build a high-quality, queryable knowledge base that powers both human surfaces and agent grounding.
 
 **Evaluation, iteration, and synthetic data:**
 High-volume agent behavior evals, tool-use accuracy testing, planning quality measurement, voice naturalness checks, and generation of synthetic training/eval data.
 
 **Multi-agent orchestration:**
-Orchestra coordinates multiple specialized agents. Inference is used for delegation, synthesis across agents, and coordination logic.
+{{your_product_2}} coordinates multiple specialized agents. Inference is used for delegation, synthesis across agents, and coordination logic.
 
 **Development velocity & dogfooding:**
-Heavy daily use for code generation, multi-file refactors, test synthesis, architecture work, prompt engineering, and running our own agent systems (Orchestra) to move fast as a small team.
+Heavy daily use for code generation, multi-file refactors, test synthesis, architecture work, prompt engineering, and running our own agent systems ({{your_product_2}}) to move fast as a small team.
 
 **Future production & reference deployments:**
 Users will run governed agents on our platform (self-hosted or hosted). Fast open models will be a first-class, cost-effective path via our multi-provider adapters for production workloads and reference implementations.
@@ -75,10 +75,10 @@ Use these when a form asks "How will you use X?" or "Tell us about your workload
 
 - Real-time voice supervisor loop: intent understanding, dynamic planning, natural progress narration, barge-in handling, and conversational corrections while background work executes in the Harness.
 - Live multi-step agent runs: complex planning, tool calling, orchestration, state, and recovery inside user-launched agents in the governed runtime.
-- On-the-fly knowledge grounding: retrieving and synthesizing provenance-backed, temporally-aware facts from Intercal during conversations and agent execution.
-- Large-scale knowledge corpus pipelines (Intercal): web/paper ingestion, entity extraction, temporal claim synthesis, summarization, contradiction detection, and backfilling.
+- On-the-fly knowledge grounding: retrieving and synthesizing provenance-backed, temporally-aware facts from {{your_product_3}} during conversations and agent execution.
+- Large-scale knowledge corpus pipelines ({{your_product_3}}): web/paper ingestion, entity extraction, temporal claim synthesis, summarization, contradiction detection, and backfilling.
 - High-volume agent evaluation and iteration: behavior evals, tool accuracy, planning quality, and synthetic data generation at scale.
-- Multi-agent coordination: delegation, synthesis, and orchestration across specialized agents in Orchestra.
+- Multi-agent coordination: delegation, synthesis, and orchestration across specialized agents in {{your_product_2}}.
 - Internal development dogfooding: codegen, refactors, test synthesis, architecture, and running agent-orchestrated development workflows.
 - Reference production deployments: cheap, fast open-model paths for users running real governed agents (self-host or hosted).
 - Synthetic data and augmentation for agent training/evals and knowledge improvement.
@@ -128,7 +128,7 @@ None - bootstrapped (we have been accepted into multiple non-dilutive programs)
 - Other: Agent orchestration, evals, synthetic data generation, code generation, real-time voice agent supervision
 
 **Short summary of company / use case (very tight)**
-Jami Studio develops open-source infrastructure for agent-native applications. Core is the Jami Agent Harness (governed multi-LLM runtime for planning/tool-use agents) with a real-time voice supervisor as the primary interface. Workloads include live conversational agent execution, high-volume knowledge synthesis in Intercal, agent evals, multi-agent orchestration, and heavy internal dev dogfooding. Fast open models complement frontier reasoning for volume and latency.
+{{your_org}} develops open-source infrastructure for agent-native applications. Core is the {{your_core_runtime}} (governed multi-LLM runtime for planning/tool-use agents) with a real-time voice supervisor as the primary interface. Workloads include live conversational agent execution, high-volume knowledge synthesis in {{your_product_3}}, agent evals, multi-agent orchestration, and heavy internal dev dogfooding. Fast open models complement frontier reasoning for volume and latency.
 
 ---
 

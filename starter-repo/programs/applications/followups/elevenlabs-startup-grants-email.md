@@ -5,7 +5,7 @@
 > equivalent. It's not a fill-in-the-blank template to send as-is.
 
 **To:** grants@elevenlabs.io
-**Apply as:** Jami Studio
+**Apply as:** {{your_org}}
 **Founder:** [Your Name]
 **Referral code:** `[YOUR-REFERRAL-CODE]` (if applying via a partner pack — optional)
 **Offer:** 11M credits/month (~200+ hours audio), free for 3 months (~$3,300 value)
@@ -18,9 +18,9 @@
 
 ## Subject line (pick one)
 
-**Recommended:** Startup Grant Application - Jami Studio
+**Recommended:** Startup Grant Application - {{your_org}}
 
-**Alt:** Startup grant application for Jami Studio - voice-first agent platform
+**Alt:** Startup grant application for {{your_org}} - voice-first agent platform
 
 ---
 
@@ -28,10 +28,10 @@
 
 Hi ElevenLabs grants team,
 
-I'm applying for the Startup Grant program on behalf of **Jami Studio**. I created an ElevenLabs account and tried to submit through the apply page, but it seems broken or offline — it shows a "thanks for submitting" message without actually walking through an application. Sending everything here instead.
+I'm applying for the Startup Grant program on behalf of **{{your_org}}**. I created an ElevenLabs account and tried to submit through the apply page, but it seems broken or offline — it shows a "thanks for submitting" message without actually walking through an application. Sending everything here instead.
 
-**Company:** Jami Studio
-**Website:** https://www.jami.studio
+**Company:** {{your_org}}
+**Website:** {{your_website}}
 **Founder:** [Your Name] (solo technical founder)
 **Employees:** 1
 **Funding:** Bootstrapped, pre-revenue, under $10M raised
@@ -40,13 +40,13 @@ I'm applying for the Startup Grant program on behalf of **Jami Studio**. I creat
 
 **What we build**
 
-Jami Studio is an agent-native platform for building and running governed AI agents, with voice as the main interaction layer.
+{{your_org}} is an agent-native platform for building and running governed AI agents, with voice as the main interaction layer.
 
-Most agent products still feel like chat with extra steps. We're building something different: a real-time, human-sounding voice supervisor that keeps a natural conversation going while real work runs in the background. The agent dispatches tasks to a governed runtime (the Jami Harness), monitors progress, narrates updates, and takes mid-flight corrections without the user ever feeling like they left the conversation.
+Most agent products still feel like chat with extra steps. We're building something different: a real-time, human-sounding voice supervisor that keeps a natural conversation going while real work runs in the background. The agent dispatches tasks to a governed runtime (the {{your_product}}), monitors progress, narrates updates, and takes mid-flight corrections without the user ever feeling like they left the conversation.
 
-The platform includes the Jami Agent Harness (governed runtime, BYOK/self-host), Studio UI Registry (tokenized, agent-native components), Orchestra (multi-agent coordination), Intercal (provenance-backed knowledge substrate), and Collectiva (open agent governance). Together they form a full stack for voice-first agent applications.
+The platform includes the {{your_core_runtime}} (governed runtime, BYOK/self-host), {{your_product_5}} (tokenized, agent-native components), {{your_product_2}} (multi-agent coordination), {{your_product_3}} (provenance-backed knowledge substrate), and {{your_product_4}} (open agent governance). Together they form a full stack for voice-first agent applications.
 
-We're open-core: a capable OSS foundation plus a commercial hosted lane for managed agents, enterprise governance, and production support. Jami Studio is the public hub for both. Active development now, long-term product intent. Not a demo, not a one-off campaign.
+We're open-core: a capable OSS foundation plus a commercial hosted lane for managed agents, enterprise governance, and production support. {{your_org}} is the public hub for both. Active development now, long-term product intent. Not a demo, not a one-off campaign.
 
 ---
 
@@ -65,7 +65,7 @@ Voice quality is the product. Users should forget they're talking to software. E
 - **Speech-to-Text** in the voice interaction loop
 - **Voice Design + Voice Cloning** for Studio-branded agent personas
 - Integration behind a voice adapter in the Harness so ElevenLabs is the default production path
-- Dogfooding voice across Orchestra (our internal multi-agent dev system) and the public Harness/Studio experience
+- Dogfooding voice across {{your_product_2}} (our internal multi-agent dev system) and the public Harness/Studio experience
 
 This is not audiobooks or dubbing as a service. We're building agent infrastructure where voice is the interface.
 
@@ -73,7 +73,7 @@ This is not audiobooks or dubbing as a service. We're building agent infrastruct
 
 **About the team**
 
-I'm [Your Name], solo technical founder. I'm building the full platform myself right now, with Orchestra as our agent-orchestrated development system so one person can move like a small team without sacrificing architecture quality.
+I'm [Your Name], solo technical founder. I'm building the full platform myself right now, with {{your_product_2}} as our agent-orchestrated development system so one person can move like a small team without sacrificing architecture quality.
 
 This isn't a slide-deck startup. Real repos, production-shaped architecture docs, and working subsystems are already behind the work. Pre-team by choice at this stage. Hiring into a system that works, not a prototype.
 
@@ -85,29 +85,29 @@ We're also in a few other startup programs and serious about committing to Eleve
 
 - ≤25 employees (we're 1)
 - ≤$10M funding (bootstrapped, pre-revenue)
-- New ElevenLabs startup grant applicant for Jami Studio
+- New ElevenLabs startup grant applicant for {{your_org}}
 
 Happy to share architecture docs, repo links, or a site walkthrough.
 
 Thanks for reading,
 
 [Your Name]
-Jami Studio
+{{your_org}}
 [your email]
 
 ---
 
 ## Shorter version (if you want a tighter email)
 
-**Subject:** Startup Grant Application - Jami Studio
+**Subject:** Startup Grant Application - {{your_org}}
 
 Hi,
 
-Applying for the ElevenLabs Startup Grant for **Jami Studio**. I created an account but the apply page appears broken (instant "thanks for submitting" with no actual form). Sending details here instead.
+Applying for the ElevenLabs Startup Grant for **{{your_org}}**. I created an account but the apply page appears broken (instant "thanks for submitting" with no actual form). Sending details here instead.
 
-**Company:** Jami Studio | **Founder:** [Your Name] | **Team:** 1 | **Funding:** Bootstrapped, pre-revenue
+**Company:** {{your_org}} | **Founder:** [Your Name] | **Team:** 1 | **Funding:** Bootstrapped, pre-revenue
 
-**Product:** Open-core agent platform where voice is the main interface. Real-time voice supervisor + governed Harness runtime running work in the background. Full stack: Harness, UI Registry, Orchestra, Intercal, Collectiva. Public hub launching now, commercial hosted lane ahead.
+**Product:** Open-core agent platform where voice is the main interface. Real-time voice supervisor + governed Harness runtime running work in the background. Full stack: Harness, UI Registry, {{your_product_2}}, {{your_product_3}}, {{your_product_4}}. Public hub launching now, commercial hosted lane ahead.
 
 **ElevenLabs use:** Conversational AI Agents (primary), TTS for progress narration, STT in the voice loop, voice design/cloning for Studio personas, default production path via Harness voice adapter. Prior voice bake-offs done; ElevenLabs won on naturalness and conversational tooling.
 
