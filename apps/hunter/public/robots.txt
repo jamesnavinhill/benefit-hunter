@@ -1,0 +1,73 @@
+# Benefit Hunter — https://benefits.navinhill.com/
+# Public, free tool: full crawl is intended. Internal noindex rules
+# (search confirmation paths etc.) are enforced with meta tags, not here.
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Search answer engines
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: meta-webindexer
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Model-training crawlers — explicitly permitted (public, free content)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: meta-externalfetcher
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amzn-SearchBot
+Allow: /
+
+User-agent: Amzn-User
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://benefits.navinhill.com/sitemap.xml
