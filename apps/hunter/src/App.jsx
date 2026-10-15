@@ -9,13 +9,15 @@ import { agentState } from "./lib/agent";
 import { loadRemoteState, saveRemoteState } from "./lib/remoteState";
 import { storage, STORAGE_VERSION } from "./lib/storage";
 import { isSupabaseConfigured, supabase } from "./lib/supabase";
-import { MULTI_VENDORS, totalCashLikeT1, totalCountedT1, VENDOR_COUNT } from "./lib/stats";
+import { CATEGORY_COUNTS, CATEGORY_TOTALS, formatCategoryValue, getCategoryTotals, OPPORTUNITY_CATEGORIES, programsInCategory } from "./data/opportunityCategories";
+import { groupProgramsByVendor } from "./lib/vendorSummary";
 import { MultiSelectDropdown } from "./components/MultiSelectDropdown";
 import { SingleSelectDropdown } from "./components/SingleSelectDropdown";
 import { ProgramCard } from "./components/ProgramCard";
 import { ProofView } from "./components/ProofView";
 import { GuidedView } from "./components/GuidedView";
 import { Stat } from "./components/Stat";
+import { HeaderMenu } from "./components/HeaderMenu";
 import { AccentsModal } from "./components/AccentsModal";
 import { applyAccents, clearLocalAccents, loadLocalAccents, mergeAccents, saveLocalAccents } from "./lib/accents";
 import { DEFAULT_ACCENTS } from "./data/accentDefaults";
@@ -25,9 +27,9 @@ export default function App() {
   const [profile, setProfile]             = useState(DEFAULT_PROFILE);
   const [profileOpen, setProfileOpen]     = useState(false);
   const [settingsTab, setSettingsTab]     = useState("matching");
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [profileDoc, setProfileDoc]       = useState(DEFAULT_PROFILE_DOC);
   const [onlyForMe, setOnlyForMe]         = useState(false);
+  const [browseCategory, setBrowseCategory] = useState("all");
   const [search, setSearch]               = useState("");
   const [laneFilters, setLaneFilters]     = useState(() => new Set());
   const [accessFilters, setAccessFilters] = useState(() => new Set());
@@ -39,7 +41,7 @@ export default function App() {
   const [sortBy, setSortBy]               = useState("valueNum");
   const [viewMode, setViewMode]           = useState("grid"); // "grid" | "by_vendor"
   const [loaded, setLoaded]               = useState(false);
-  const [collapsedVendors, setCollapsedVendors] = useState(() => new Set());
+  const [collapsedVendors, setCollapsedVendors] = useState(() => new Set(PROGRAMS.map(p => p.vendor)));
   const [statsExpanded, setStatsExpanded] = useState(false);
   const [session, setSession] = useState(null);
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured);
@@ -263,9 +265,14 @@ export default function App() {
     new Set(PROGRAMS.filter(p => profileMatches(p, profile)).map(p => p.id))
   , [profile]);
 
+  const categoryPrograms = useMemo(
+    () => programsInCategory(PROGRAMS, browseCategory),
+    [browseCategory]
+  );
+
   // Filtered list
   const filtered = useMemo(() => {
-    let list = PROGRAMS.filter(p => {
+    let list = categoryPrograms.filter(p => {
       if (onlyForMe && !profileMatchSet.has(p.id))                                       return false;
       if (laneFilters.size > 0    && !laneFilters.has(p.lane))                           return false;
       if (accessFilters.size > 0  && !p.access.some(a => accessFilters.has(a)))          return false;
@@ -277,6 +284,7 @@ export default function App() {
       if (search.trim()) {
         const q = search.toLowerCase();
         if (!p.name.toLowerCase().includes(q) &&
+            !p.vendor.toLowerCase().includes(q) &&
             !p.description.toLowerCase().includes(q) &&
             !p.lane.toLowerCase().includes(q) &&
             !p.type.toLowerCase().includes(q)) return false;
@@ -297,23 +305,27 @@ export default function App() {
       return am - bm || b.value.estimate - a.value.estimate;
     });
     return list;
-  }, [search, laneFilters, accessFilters, tagFilters, tierFilters, statusFilters, stateFilters, sortBy, statuses, onlyForMe, profileMatchSet]);
+  }, [categoryPrograms, search, laneFilters, accessFilters, tagFilters, tierFilters, statusFilters, stateFilters, sortBy, statuses, onlyForMe, profileMatchSet]);
 
   // Stats
   const stats = useMemo(() => {
     const counts = { submit:0, draft:0, direct:0, stale:0 };
-    PROGRAMS.forEach(p => counts[agentState(p).key]++);
+    filtered.forEach(p => counts[agentState(p).key]++);
+    const visibleIds = new Set(filtered.map(p => p.id));
+    const visibleStatuses = Object.entries(statuses).filter(([id]) => visibleIds.has(id)).map(([, status]) => status);
     return {
       submit: counts.submit, draft: counts.draft, direct: counts.direct,
-      applied:  Object.values(statuses).filter(s => s === "applied").length,
-      approved: Object.values(statuses).filter(s => s === "approved").length,
-      interested: Object.values(statuses).filter(s => s === "agent_queued").length,
-      forMe:    profileMatchSet.size,
+      applied: visibleStatuses.filter(s => s === "applied").length,
+      approved: visibleStatuses.filter(s => s === "approved").length,
+      interested: visibleStatuses.filter(s => s === "agent_queued").length,
+      forMe: filtered.filter(p => profileMatchSet.has(p.id)).length,
     };
-  }, [statuses, profileMatchSet]);
+  }, [filtered, statuses, profileMatchSet]);
 
-  const tagCounts    = useMemo(() => Object.fromEntries(TAG_ORDER.map(t => [t, PROGRAMS.filter(p => p.tags.includes(t)).length])), []);
-  const accessCounts = useMemo(() => Object.fromEntries(ACCESS_ORDER.map(a => [a, PROGRAMS.filter(p => p.access.includes(a)).length])), []);
+  const categoryTotals = useMemo(() => getCategoryTotals(filtered), [filtered]);
+  const categoryVendorCount = useMemo(() => new Set(filtered.map(p => p.vendor)).size, [filtered]);
+  const tagCounts    = useMemo(() => Object.fromEntries(TAG_ORDER.map(t => [t, categoryPrograms.filter(p => p.tags.includes(t)).length])), [categoryPrograms]);
+  const accessCounts = useMemo(() => Object.fromEntries(ACCESS_ORDER.map(a => [a, categoryPrograms.filter(p => p.access.includes(a)).length])), [categoryPrograms]);
 
   const inp = {
     background:"var(--surface-2)", border:"1px solid var(--line)", color:"var(--text-dim)",
@@ -326,191 +338,67 @@ export default function App() {
       : syncStatus === "loading" ? "loading"
       : syncStatus === "error" ? "sync error"
       : "synced"
-    : isSupabaseConfigured ? "local only" : "auth off";
+    : "local only";
 
   return (
     <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", fontFamily:"monospace" }}>
      <div className="shell">
 
       {/* HEADER */}
-      <div style={{ padding:"22px 22px 0", borderBottom:"1px solid var(--line-soft)" }}>
+      <div className="app-header" style={{ padding:"12px 22px 0", borderBottom:"1px solid var(--line-soft)" }}>
         <div className="header-row">
           <div className="header-title-block">
-            <div className="header-wordmark" style={{ fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.05em", color:"var(--text)" }}>
-              BENEFIT HUNTER
+            <div className="header-title-line">
+              <div className="header-wordmark" style={{ fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.05em", color:"var(--text)" }}>
+                BENEFIT HUNTER
+              </div>
             </div>
-            <span className="header-counter" style={{ fontSize:9, color:"var(--text-dim3)", letterSpacing:"0.15em", textTransform:"uppercase", fontFamily:"monospace" }}>
-              {filtered.length} / {PROGRAMS.length} <span style={{ color:"var(--line)" }}>benefits</span>
-            </span>
           </div>
 
-          {/* HEADER ACTION ROW */}
-          <div className="header-actions">
-            <button onClick={() => setOnlyForMe(o => !o)} title="Show only benefits matching your profile" style={{
-              background: onlyForMe ? "color-mix(in oklch, var(--match) 14%, transparent)" : "transparent",
-              border:"1px solid " + (onlyForMe ? "color-mix(in oklch, var(--match) 40%, transparent)" : "var(--line)"),
-              color: onlyForMe ? "var(--match)" : "var(--text-dim)",
-              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:10,
-              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
-              display:"inline-flex", alignItems:"center", gap:5, minHeight:28,
-            }}>★<span className="btn-for-me-text">For Me</span></button>
-            <button onClick={() => setViewMode(v => v === "guided" ? "grid" : "guided")} title="Strategy-tier guided flow: umbrella packs first, then quick applies, then drafts" style={{
-              background: viewMode === "guided" ? "color-mix(in oklch, var(--match) 14%, transparent)" : "transparent",
-              border:"1px solid " + (viewMode === "guided" ? "color-mix(in oklch, var(--match) 40%, transparent)" : "var(--line)"),
-              color: viewMode === "guided" ? "var(--match)" : "var(--text-dim)",
-              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:10,
-              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
-              display:"inline-flex", alignItems:"center", gap:5, minHeight:28,
-            }}>☰<span className="btn-for-me-text">Guided</span></button>
-            <button onClick={() => setViewMode(v => v === "proof" ? "grid" : "proof")} title="Real dollars secured, by stack lane" style={{
-              background: viewMode === "proof" ? "color-mix(in oklch, var(--gold) 14%, transparent)" : "transparent",
-              border:"1px solid " + (viewMode === "proof" ? "color-mix(in oklch, var(--gold) 40%, transparent)" : "var(--line)"),
-              color: viewMode === "proof" ? "var(--gold)" : "var(--text-dim)",
-              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:10,
-              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
-              display:"inline-flex", alignItems:"center", gap:5, minHeight:28,
-            }}>$<span className="btn-for-me-text">Proof</span></button>
-            <button onClick={() => setViewMode(v => v === "by_vendor" ? "grid" : "by_vendor")}
-              title={"View: " + (viewMode === "by_vendor" ? "By Vendor" : "Flat Grid") + " (click to toggle)"} style={{
-              background: viewMode === "by_vendor" ? "color-mix(in oklch, var(--info) 14%, transparent)" : "transparent",
-              border:"1px solid " + (viewMode === "by_vendor" ? "color-mix(in oklch, var(--info) 40%, transparent)" : "var(--line)"),
-              color: viewMode === "by_vendor" ? "var(--info)" : "var(--text-dim)",
-              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:12,
-              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", lineHeight:1,
-              display:"inline-flex", alignItems:"center", justifyContent:"center", minHeight:28, minWidth:28,
-            }}>{viewMode === "by_vendor" ? "▦" : "▤"}</button>
-            <a href="/automation-kit/" target="_blank" rel="noopener noreferrer"
-              title="Optional add-on: auto-update your own benefits tracking Sheet from Gmail using your own Gemini key. Runs entirely in your Google account." style={{
-              background: "transparent",
-              border:"1px solid var(--line)",
-              color:"var(--text-dim)",
-              borderRadius:3, padding:"5px 10px", cursor:"pointer", fontSize:10,
-              fontFamily:"monospace", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:700,
-              display:"inline-flex", alignItems:"center", gap:5, minHeight:28, textDecoration:"none",
-            }}>⚙<span className="btn-for-me-text">Kit</span></a>
-            <div style={{ position:"relative" }}>
-              <button onClick={() => setProfileMenuOpen(o => !o)} title={signedInUser ? "Account" : "Profile"} style={{
-                background: profileMenuOpen ? "var(--line-soft)" : "transparent",
-                border:"1px solid " + (profileMenuOpen ? "var(--line)" : "var(--line)"),
-                color:"var(--text)",
-                borderRadius:3, padding:"5px 9px", cursor:"pointer",
-                fontFamily:"monospace", minHeight:28, minWidth:28,
-                display:"flex", alignItems:"center", justifyContent:"center", gap:4,
-              }}>
-                <span style={{ fontSize:13, color: signedInUser ? "var(--match)" : "var(--text-dim)", lineHeight:1 }}>◉</span>
-                <span style={{ fontSize:7, color:"var(--text-dim2)" }}>{profileMenuOpen ? "▲" : "▼"}</span>
+          <HeaderMenu
+            onlyForMe={onlyForMe}
+            onToggleForMe={() => setOnlyForMe(value => !value)}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            onOpenSettings={(tab) => { setSettingsTab(tab); setProfileOpen(true); }}
+            signedInUser={signedInUser}
+            syncStatus={syncStatus}
+            syncError={syncError}
+            syncLabel={syncLabel}
+            isSupabaseConfigured={isSupabaseConfigured}
+            onSignIn={signInWithProvider}
+            onSignOut={signOut}
+          />
+        </div>
+        <nav className="opportunity-tabs" role="tablist" aria-label="Opportunity type">
+          {OPPORTUNITY_CATEGORIES.map(({ id, label }) => {
+            const count = CATEGORY_COUNTS[id];
+            const totals = CATEGORY_TOTALS[id];
+            const active = browseCategory === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setBrowseCategory(id)}
+                className={"opportunity-tab" + (active ? " active" : "")}
+              >
+                <span>{label}</span>
+                <span className="opportunity-tab-count">{count}</span>
+              <span className="opportunity-tab-value">{formatCategoryValue(totals.tier1CountedValue)}</span>
               </button>
-              {profileMenuOpen && (
-                <>
-                  <div onClick={() => setProfileMenuOpen(false)} style={{
-                    position:"fixed", inset:0, zIndex:40,
-                  }} />
-                  <div style={{
-                    position:"absolute", top:"calc(100% + 4px)", right:0, zIndex:50,
-                    background:"var(--surface-2)", border:"1px solid var(--line)", borderRadius:4,
-                    minWidth:160, padding:4,
-                    boxShadow:"0 8px 24px rgba(0,0,0,0.6)",
-                  }}>
-                    <button onClick={() => { setProfileMenuOpen(false); setSettingsTab("matching"); setProfileOpen(true); }} style={{
-                      display:"block", width:"100%", textAlign:"left",
-                      background:"transparent", border:"none", color:"var(--text)",
-                      padding:"7px 10px", cursor:"pointer", fontSize:10,
-                      fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
-                    }} onMouseEnter={e => e.currentTarget.style.background = "var(--line-soft)"}
-                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                      ⚙  Settings
-                    </button>
-                    <button onClick={() => { setProfileMenuOpen(false); setSettingsTab("appearance"); setProfileOpen(true); }} style={{
-                      display:"block", width:"100%", textAlign:"left",
-                      background:"transparent", border:"none", color:"var(--text)",
-                      padding:"7px 10px", cursor:"pointer", fontSize:10,
-                      fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
-                    }} onMouseEnter={e => e.currentTarget.style.background = "var(--line-soft)"}
-                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                      ◐  Appearance
-                    </button>
-                    <div style={{
-                      padding:"6px 10px", borderTop:"1px solid var(--line-soft)", marginTop:4,
-                      fontSize:9, color:"var(--text-dim2)", lineHeight:1.5,
-                    }}>
-                      {signedInUser ? (
-                        <>
-                          <div style={{ display:"flex", alignItems:"center", marginBottom:2 }}>
-                            <span style={{ color:"var(--match)" }}>Signed in</span>
-                            <span
-                              title={syncLabel + (syncError ? " · " + syncError : "")}
-                              style={{
-                                marginLeft:"auto",
-                                width:6, height:6, borderRadius:"50%",
-                                background:
-                                  syncStatus === "error"   ? "var(--stop)" :
-                                  syncStatus === "saving"  ? "var(--wait)" :
-                                  syncStatus === "loading" ? "var(--wait)" :
-                                  syncStatus === "synced"  ? "var(--match)" : "var(--text-dim3)",
-                                flexShrink:0,
-                              }}
-                            />
-                          </div>
-                          <div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:220 }}>
-                            {signedInUser.email || signedInUser.user_metadata?.user_name || signedInUser.id}
-                          </div>
-                          {syncStatus === "error" && (
-                            <div style={{ color:"var(--stop)", marginTop:4 }}>{syncError || "Sync error"}</div>
-                          )}
-                        </>
-                      ) : (
-                        <div>{isSupabaseConfigured ? "Optional cloud sync" : "Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to enable sign in."}</div>
-                      )}
-                    </div>
-                    {signedInUser ? (
-                      <button onClick={() => { setProfileMenuOpen(false); signOut(); }} style={{
-                        display:"block", width:"100%", textAlign:"left",
-                        background:"transparent", border:"none", color:"var(--stop)",
-                        padding:"7px 10px", cursor:"pointer", fontSize:10,
-                        fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
-                      }} onMouseEnter={e => e.currentTarget.style.background = "var(--line-soft)"}
-                         onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                        ←  Sign out
-                      </button>
-                    ) : (
-                      <>
-                        <button disabled={!isSupabaseConfigured} onClick={() => signInWithProvider("github")} style={{
-                          display:"block", width:"100%", textAlign:"left",
-                          background:"transparent", border:"none", color:isSupabaseConfigured ? "var(--text)" : "var(--text-dim3)",
-                          padding:"7px 10px", cursor:isSupabaseConfigured ? "pointer" : "not-allowed", fontSize:10,
-                          fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
-                        }} onMouseEnter={e => { if (isSupabaseConfigured) e.currentTarget.style.background = "var(--line-soft)"; }}
-                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                          →  Sign in with GitHub
-                        </button>
-                        <button disabled={!isSupabaseConfigured} onClick={() => signInWithProvider("google")} style={{
-                          display:"block", width:"100%", textAlign:"left",
-                          background:"transparent", border:"none", color:isSupabaseConfigured ? "var(--text)" : "var(--text-dim3)",
-                          padding:"7px 10px", cursor:isSupabaseConfigured ? "pointer" : "not-allowed", fontSize:10,
-                          fontFamily:"monospace", letterSpacing:"0.05em", borderRadius:3,
-                        }} onMouseEnter={e => { if (isSupabaseConfigured) e.currentTarget.style.background = "var(--line-soft)"; }}
-                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                          →  Sign in with Google
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="header-subtext">
-          <span className="header-subtext-line">Community licenses · Free credits</span>
-          <span className="header-subtext-sep"> · </span>
-          <span className="header-subtext-line">Startup programs · Worthy discounts</span>
-        </div>
+            );
+          })}
+        </nav>
 
         {/* STATS */}
         <div className={"stats-strip" + (statsExpanded ? " expanded" : "")}>
-          <Stat label="Total Value"   value={"$" + (Math.round(totalCountedT1/100000)/10).toFixed(1) + "m"} tone="gold"  />
-          <Stat label="Quick Apply"   value={stats.submit}   tone="ok"    />
-          <Stat label="Vendors"       value={VENDOR_COUNT}   tone="neutral" />
+          <Stat label="Tier 1 est. value" value={formatCategoryValue(categoryTotals.tier1CountedValue)} tone="gold" />
+          <Stat label="All tiers est. value*" value={formatCategoryValue(categoryTotals.countedValue)} tone="neutral" />
+          <Stat label="Opportunities" value={filtered.length} tone="neutral" />
+          <Stat label="Quick Apply" value={stats.submit} tone="ok" />
+          <Stat label="Vendors" value={categoryVendorCount} tone="neutral" />
           <Stat label="For You"       value={stats.forMe}    tone="match" />
           <div className="stats-divider" />
           <button
@@ -527,7 +415,8 @@ export default function App() {
             }}
           >{statsExpanded ? "−" : "+"}</button>
           <span className="stats-secondary-group">
-            <Stat label="Cash Value"      value={"$" + (Math.round(totalCashLikeT1/100000)/10).toFixed(1) + "m"} tone="gold" />
+            <Stat label="Tier 1 cash-like est." value={formatCategoryValue(categoryTotals.tier1CashLikeValue)} tone="gold" />
+            <Stat label="All-tier cash-like est.*" value={formatCategoryValue(categoryTotals.cashLikeValue)} tone="gold" />
             <Stat label="Quick Draft"     value={stats.draft}      tone="wait"  />
             <Stat label="Use Direct"      value={stats.direct}     tone="ok"    />
             <Stat label="Interested"      value={stats.interested} tone="ok"    />
@@ -546,18 +435,18 @@ export default function App() {
       }}>
         <MultiSelectDropdown
           label="Category"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={Object.keys(LANE_COLORS)}
           activeSet={laneFilters}
           onToggle={toggleInSet(setLaneFilters)}
           onClear={clearSet(setLaneFilters)}
           getLabel={k => k}
-          getCount={k => PROGRAMS.filter(p => p.lane === k).length}
+          getCount={k => categoryPrograms.filter(p => p.lane === k).length}
           getTone={k => LANE_COLORS[k].tone}
         />
         <MultiSelectDropdown
           label="Access"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={ACCESS_ORDER}
           activeSet={accessFilters}
           onToggle={toggleInSet(setAccessFilters)}
@@ -568,7 +457,7 @@ export default function App() {
         />
         <MultiSelectDropdown
           label="Criteria"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={TAG_ORDER}
           activeSet={tagFilters}
           onToggle={toggleInSet(setTagFilters)}
@@ -579,35 +468,35 @@ export default function App() {
         />
         <MultiSelectDropdown
           label="Tiers"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={["1","2"]}
           activeSet={tierFilters}
           onToggle={toggleInSet(setTierFilters)}
           onClear={clearSet(setTierFilters)}
           getLabel={k => k === "1" ? "T1 — Free" : "T2 — Discount"}
-          getCount={k => PROGRAMS.filter(p => String(p.tier) === k).length}
+          getCount={k => categoryPrograms.filter(p => String(p.tier) === k).length}
           getTone={k => k === "1" ? "accent" : null}
         />
         <MultiSelectDropdown
           label="States"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={["submit","draft","direct","stale"]}
           activeSet={stateFilters}
           onToggle={toggleInSet(setStateFilters)}
           onClear={clearSet(setStateFilters)}
           getLabel={k => ({ submit:"Quick Apply", draft:"Quick Draft", direct:"Use Direct", stale:"Verify First" }[k])}
-          getCount={k => PROGRAMS.filter(p => agentState(p).key === k).length}
+          getCount={k => categoryPrograms.filter(p => agentState(p).key === k).length}
           getTone={k => ({ submit:"ok", draft:"wait", direct:"ok", stale:"wait" }[k])}
         />
         <MultiSelectDropdown
           label="Statuses"
-          total={PROGRAMS.length}
+          total={categoryPrograms.length}
           items={Object.keys(STATUS_CONFIG)}
           activeSet={statusFilters}
           onToggle={toggleInSet(setStatusFilters)}
           onClear={clearSet(setStatusFilters)}
           getLabel={k => STATUS_CONFIG[k].label}
-          getCount={k => PROGRAMS.filter(p => (statuses[p.id] || "not_applied") === k).length}
+          getCount={k => categoryPrograms.filter(p => (statuses[p.id] || "not_applied") === k).length}
           getTone={k => STATUS_CONFIG[k].tone === "neutral" ? null : STATUS_CONFIG[k].tone}
         />
         <input type="text" placeholder="Search benefits..." value={search}
@@ -667,23 +556,7 @@ export default function App() {
           </div>
         ) : (
           (() => {
-            // Group filtered programs by vendor
-            const groups = {};
-            for (const p of filtered) {
-              if (!groups[p.vendor]) groups[p.vendor] = { name: p.vendor, programs: [], cashLike: 0, counted: 0 };
-              groups[p.vendor].programs.push(p);
-              if (p.value.counted) groups[p.vendor].counted += p.value.estimate;
-              if (p.value.counted && p.value.cashLike) groups[p.vendor].cashLike += p.value.estimate;
-            }
-            // Sort: multi-offer vendors first (by cashLike desc), then singles alphabetical
-            const sortedVendors = Object.values(groups).sort((a, b) => {
-              if (a.programs.length !== b.programs.length) {
-                if (a.programs.length > 1 && b.programs.length === 1) return -1;
-                if (b.programs.length > 1 && a.programs.length === 1) return 1;
-              }
-              if (a.programs.length > 1 && b.programs.length > 1) return b.cashLike - a.cashLike;
-              return a.name.localeCompare(b.name);
-            });
+            const sortedVendors = groupProgramsByVendor(filtered);
 
             const toggleVendor = (name) => {
               setCollapsedVendors(prev => {
@@ -694,51 +567,45 @@ export default function App() {
             };
 
             return (
-              <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
+              <div className="vendor-directory">
+                <div className="vendor-directory-intro">
+                  <div>
+                    <div className="vendor-directory-title">Opportunity value by vendor</div>
+                    <div className="vendor-directory-caption">Catalog value estimates, not confirmed awards; some partner offers may overlap.</div>
+                  </div>
+                  <div className="vendor-directory-summary">
+                    <span>{sortedVendors.length} vendors</span>
+                    <span>{filtered.length} offers</span>
+                    <strong>{formatCategoryValue(categoryTotals.tier1CountedValue)} Tier 1</strong>
+                  </div>
+                </div>
                 {sortedVendors.map(v => {
                   const collapsed = collapsedVendors.has(v.name);
-                  const isMulti = v.programs.length > 1;
                   return (
-                    <div key={v.name}>
-                      {/* Vendor header */}
-                      <div
+                    <section className="vendor-group" key={v.name}>
+                      <button
+                        type="button"
+                        className="vendor-group-header"
                         onClick={() => toggleVendor(v.name)}
-                        style={{
-                          display:"flex", alignItems:"center", gap:10,
-                          padding:"8px 12px", marginBottom:8,
-                          background: isMulti ? "rgba(79,163,232,0.06)" : "transparent",
-                          border:"1px solid " + (isMulti ? "rgba(79,163,232,0.25)" : "var(--line-soft)"),
-                          borderRadius:4, cursor:"pointer",
-                          transition:"background 0.15s",
-                        }}
+                        aria-expanded={!collapsed}
                       >
-                        <span style={{ fontSize:9, color:"var(--text-dim3)" }}>{collapsed ? "▶" : "▼"}</span>
-                        <span style={{ fontSize:13, fontWeight:700, color: isMulti ? "var(--text)" : "var(--text)", letterSpacing:"-0.01em" }}>
-                          {v.name}
+                        <span className="vendor-group-chevron">{collapsed ? "＋" : "−"}</span>
+                        <span className="vendor-group-name">{v.name}</span>
+                        <span className="vendor-offer-count">{v.programs.length} {v.programs.length === 1 ? "offer" : "offers"}</span>
+                        <span className="vendor-total-chip vendor-total-counted">
+                          <small>EST. VALUE</small>{formatCategoryValue(v.counted)}
                         </span>
-                        <span style={{
-                          fontSize:9, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase",
-                          color: isMulti ? "var(--info)" : "var(--text-dim2)",
-                          background: isMulti ? "rgba(79,163,232,0.1)" : "var(--line-soft)",
-                          padding:"2px 6px", borderRadius:2,
-                        }}>
-                          {v.programs.length} {v.programs.length === 1 ? "offer" : "offers"}
+                        <span className="vendor-total-chip vendor-total-cash">
+                          <small>ALL-TIER CASH-LIKE</small>{formatCategoryValue(v.cashLike)}
                         </span>
-                        <span style={{ marginLeft:"auto", display:"flex", gap:14, fontSize:10, fontFamily:"monospace" }}>
-                          {v.cashLike > 0 && (
-                            <span style={{ color:"var(--gold)" }}>
-                              cash ${(v.cashLike/1000).toFixed(v.cashLike >= 10000 ? 0 : 1)}k
-                            </span>
-                          )}
-                          <span style={{ color:"var(--text-dim2)" }}>
-                            total ${(v.counted/1000).toFixed(v.counted >= 10000 ? 0 : 1)}k
-                          </span>
+                        <span className="vendor-total-chip vendor-total-inkind">
+                          <small>IN-KIND</small>{formatCategoryValue(v.inKind)}
                         </span>
-                      </div>
+                      </button>
 
                       {/* Vendor programs */}
                       {!collapsed && (
-                        <div className="card-grid" style={{ paddingLeft: isMulti ? 12 : 0 }}>
+                        <div className="card-grid vendor-offer-grid">
                           {v.programs.map(p => (
                             <ProgramCard
                               key={p.id} program={p}
@@ -749,7 +616,7 @@ export default function App() {
                           ))}
                         </div>
                       )}
-                    </div>
+                    </section>
                   );
                 })}
               </div>
@@ -764,9 +631,13 @@ export default function App() {
         display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:8,
         fontSize:8, color:"var(--text-dim2)", letterSpacing:"0.08em",
       }}>
-        <span>BENEFIT HUNTER v5 // {PROGRAMS.length} BENEFITS // {VENDOR_COUNT} VENDORS</span>
+        <span>BENEFIT HUNTER v5 // {filtered.length} OPPORTUNITIES // {categoryVendorCount} VENDORS</span>
         <span style={{ display:"flex", gap:14, alignItems:"center" }}>
-          <span>cash-like ${(totalCashLikeT1/1000).toFixed(0)}k · counted ${(totalCountedT1/1000).toFixed(0)}k</span>
+          <span title="Totals are catalog estimates, not awards; partner and bundle values may overlap">Tier 1 est. {formatCategoryValue(categoryTotals.tier1CountedValue)} · all tiers est.* {formatCategoryValue(categoryTotals.countedValue)} · *may overlap</span>
+          <a href="https://github.com/jamesnavinhill/benefit-hunter" target="_blank" rel="noopener noreferrer"
+            style={{ color:"var(--text-dim)", textDecoration:"none", borderBottom:"1px dotted var(--line)" }}>
+            github.com/jamesnavinhill/benefit-hunter ↗
+          </a>
         </span>
       </div>
 
