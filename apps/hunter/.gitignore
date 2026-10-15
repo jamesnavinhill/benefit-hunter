@@ -12,3 +12,5 @@ yarn-error.log*
 public/automation-kit/starter-repo.zip
 .vercel
 .claude/
+bun.lock
+bun.lockb
