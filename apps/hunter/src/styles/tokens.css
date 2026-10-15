@@ -12,7 +12,7 @@
  */
 :root {
   /* === Semantic — theme-independent === */
-  --accent: oklch(0.78 0.16 75);
+  --accent: oklch(0.555 0.190 342.0);
   --neutral-action: oklch(0.75 0 0);
   --gold:   oklch(0.83 0.17 85);
   --match:  oklch(0.78 0.18 150);
@@ -51,7 +51,7 @@
   --neutral-action: oklch(0.30 0.01 75);
   --action-text: #fffdf8;
 
-  --accent: oklch(0.48 0.15 75);
+  --accent: oklch(0.40 0.160 342.0);
   --gold:   oklch(0.48 0.14 75);
   --match:  oklch(0.42 0.14 150);
   --ok:     oklch(0.42 0.13 148);

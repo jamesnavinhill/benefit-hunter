@@ -2,7 +2,7 @@
 
 Durable documentation for **Benefit Hunter** — a free public tool and setup kit that
 helps founders find, qualify for, and apply to startup benefit programs (credits,
-community licenses, discounts). It runs on Vercel (`benefit-hunter.vercel.app`) and acts as a
+community licenses, discounts). It runs on Vercel (`benefits.navinhill.com`) and acts as a
 free marketing funnel into Jami Studio.
 
 This `docs/` tree is the durable operating layer. The live app under `apps/hunter`
@@ -44,6 +44,6 @@ acceptance criteria are met.
   any doc, fixture, catalog entry, or example. See
   [security/privacy-and-secrets.md](./security/privacy-and-secrets.md).
 - Refer to the product as **Benefit Hunter** and the studio as **Jami Studio**
-  (capitalized, with a space). Use `benefits.jami.studio` for the app domain and
+  (capitalized, with a space). Use `benefits.navinhill.com` for the app domain and
   `www.jami.studio` for the studio site; preserve `jami.studio` only in email
   addresses.

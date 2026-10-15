@@ -151,6 +151,15 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
         </div>
       )}
 
+      <div className="program-value-line" aria-label="Estimated offer value">
+        <span>{program.value?.label || "Value not stated"}</span>
+        {program.value?.counted && Number(program.value.estimate) > 0 && (
+          <strong>{new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(program.value.estimate)}</strong>
+        )}
+        {program.value?.counted && !program.value.cashLike && <small>in-kind estimate</small>}
+        {!program.value?.counted && <small>not included in totals</small>}
+      </div>
+
       {/* ROW 5 — Actions — pinned to bottom */}
       <div style={{ display:"flex", gap:7, alignItems:"center", marginTop:"auto", paddingTop:4 }}>
         <a href={program.urls.apply} target="_blank" rel="noopener noreferrer" style={{
@@ -204,7 +213,7 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
             <span style={{ color:"var(--text-dim2)" }}>eligible</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)", fontFamily:"inherit" }}>{program.eligibility}</span>
           </div>
           <div style={{ marginTop:6, paddingTop:6, borderTop:"1px dashed var(--line)" }}>
-            <span style={{ color:"var(--gold)" }}>value</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>${program.value.estimate.toLocaleString()} · {program.value.cashLike ? "cash-like" : "in-kind"} · {program.value.counted ? "counted" : "uncounted"}</span>
+            <span style={{ color:"var(--gold)" }}>value</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.value?.label || "not stated"} · {program.value?.cashLike ? "cash-like" : "in-kind"} · {program.value?.counted ? "counted" : "uncounted"}</span>
           </div>
           <div><span style={{ color:"var(--text-dim2)" }}>verified</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.lastVerified}</span></div>
           <div style={{ marginTop:4 }}><span style={{ color:"var(--text-dim2)" }}>url</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)", wordBreak:"break-all" }}>{program.urls.apply}</span></div>

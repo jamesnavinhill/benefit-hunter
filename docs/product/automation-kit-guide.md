@@ -13,7 +13,7 @@ library all work without it. This kit is for founders who want to go a step furt
 and stop manually re-typing "I got accepted into X" into a spreadsheet.
 
 Kit source: [`apps/hunter/public/automation-kit/`](../../apps/hunter/public/automation-kit/)
-(also downloadable directly from the live site at `benefits.jami.studio/automation-kit/`).
+(also downloadable directly from the live site at `benefits.navinhill.com/automation-kit/`).
 
 ## What it does
 

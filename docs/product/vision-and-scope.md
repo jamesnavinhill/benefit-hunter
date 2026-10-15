@@ -18,7 +18,7 @@ founder and the startup benefit programs they already qualify for. It combines:
 4. A **proof layer** — the real dollar value Jami Studio actually secured, organized
    by stack and feature, so the tool is backed by lived results rather than theory.
 
-It lives at `benefits.jami.studio` and is a free marketing funnel into Jami Studio
+It lives at `benefits.navinhill.com` and is a free marketing funnel into Jami Studio
 (`www.jami.studio`).
 
 ## Who it serves

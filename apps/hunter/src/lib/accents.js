@@ -29,7 +29,14 @@ export function applyAccents(accents) {
 export function mergeAccents(stored) {
   const out = { _theme: stored?._theme || DEFAULT_THEME };
   for (const key of TOKEN_ORDER) {
-    out[key] = { ...DEFAULT_ACCENTS[key], ...(stored?.[key] || {}) };
+    const saved = stored?.[key] || {};
+    const isPreviousBuiltInAccent = key === "accent"
+      && saved.l === 0.78 && saved.c === 0.16 && saved.h === 75;
+    out[key] = {
+      ...DEFAULT_ACCENTS[key],
+      ...saved,
+      ...(isPreviousBuiltInAccent ? DEFAULT_ACCENTS.accent : {}),
+    };
   }
   return out;
 }
