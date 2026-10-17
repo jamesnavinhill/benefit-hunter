@@ -1,0 +1,1634 @@
+{
+  "checkedAt": "2026-10-15",
+  "method": "curl GET, follow redirects, browser user-agent, 20s timeout, against apps/hunter/src/data/programs.js",
+  "totals": {
+    "uniqueUrls": 399,
+    "http200": 377,
+    "http403BotBlocked": 22,
+    "brokenOrError": 0
+  },
+  "note": "403 responses come from bot protection (Cloudflare/WAF) and could not be confirmed automatically; verify these in a browser. Broken/error list should be empty.",
+  "brokenOrError": [],
+  "botBlocked403": [
+    "https://www.canva.com/",
+    "https://www.canva.com/canva-for-nonprofits/",
+    "https://inkscape.org/",
+    "https://www.adobe.com/creativecloud/plans.html",
+    "https://www.mendeley.com/",
+    "https://openai.com/startups",
+    "https://www.make.com/en/pricing",
+    "https://clickup.com/lp/startups",
+    "https://www.mathworks.com/products/startups.html",
+    "https://chatgpt.com/students/2026/",
+    "https://openai.com/index/chatgpt-for-teachers/",
+    "https://nlpcloud.com/pricing.html",
+    "https://chatgpt.com/",
+    "https://www.tripo3d.ai/",
+    "https://www.vultr.com/company/startups/",
+    "https://docsearch.algolia.com/apply/",
+    "https://carta.com/launch/",
+    "https://gusto.com/partners/startups",
+    "https://gusto.com/",
+    "https://drata.com/product/startups",
+    "https://webflow.com/for/startups",
+    "https://webflow.com/for/classroom"
+  ],
+  "results": [
+    {
+      "status": 200,
+      "url": "https://aws.amazon.com/startups/credits/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.oracle.com/cloud/free/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.cloudflare.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://supabase.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.netlify.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://sentry.io/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://posthog.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://newrelic.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://grafana.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.mongodb.com/cloud/atlas"
+    },
+    {
+      "status": 200,
+      "url": "https://neon.tech/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://upstash.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://railway.app/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://linear.app/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.atlassian.com/software/free"
+    },
+    {
+      "status": 200,
+      "url": "https://www.jetbrains.com/community/opensource/"
+    },
+    {
+      "status": 200,
+      "url": "https://github.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://render.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://fly.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://planetscale.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://cloud.google.com/startup"
+    },
+    {
+      "status": 200,
+      "url": "https://www.cloudflare.com/forstartups/"
+    },
+    {
+      "status": 200,
+      "url": "https://vercel.com/startups/credits"
+    },
+    {
+      "status": 200,
+      "url": "https://vercel.com/solutions/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.digitalocean.com/hatch"
+    },
+    {
+      "status": 200,
+      "url": "https://render.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://neon.tech/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.mongodb.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.algolia.com/industries/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.datadoghq.com/partner/datadog-for-startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://github.com/enterprise/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://about.gitlab.com/solutions/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://sentry.io/for/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://sentry.io/for/good/"
+    },
+    {
+      "status": 200,
+      "url": "https://posthog.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://tailscale.com/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.convex.dev/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.convex.dev/open-source"
+    },
+    {
+      "status": 200,
+      "url": "https://turso.tech/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.jetbrains.com/lp/leaflets-gdc/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.blackmagicdesign.com/products/davinciresolve"
+    },
+    {
+      "status": 200,
+      "url": "https://www.blender.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://elevenlabs.io/startup-grants"
+    },
+    {
+      "status": 403,
+      "url": "https://www.canva.com/"
+    },
+    {
+      "status": 403,
+      "url": "https://www.canva.com/canva-for-nonprofits/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.figma.com/education/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.loom.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.descript.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://obsproject.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.gimp.org/"
+    },
+    {
+      "status": 403,
+      "url": "https://inkscape.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.audacityteam.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://suno.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://runway.com/product/builders"
+    },
+    {
+      "status": 200,
+      "url": "https://deepgram.com/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.assemblyai.com/contact/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://cloudinary.com/solutions/cloudinary-for-startups"
+    },
+    {
+      "status": 200,
+      "url": "https://affinity.serif.com/"
+    },
+    {
+      "status": 403,
+      "url": "https://www.adobe.com/creativecloud/plans.html"
+    },
+    {
+      "status": 200,
+      "url": "https://www.notion.so/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.notion.so/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://obsidian.md/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.zotero.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.semanticscholar.org/product/api"
+    },
+    {
+      "status": 200,
+      "url": "https://openalex.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.perplexity.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://elicit.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.researchrabbit.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.connectedpapers.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.grammarly.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://hemingwayapp.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.overleaf.com/user/subscription/plans"
+    },
+    {
+      "status": 403,
+      "url": "https://www.mendeley.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://arxiv.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://exa.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://tavily.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://brave.com/search/api/"
+    },
+    {
+      "status": 200,
+      "url": "https://serpapi.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://aistudio.google.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://console.groq.com/settings/billing/plans"
+    },
+    {
+      "status": 200,
+      "url": "https://www.together.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.mistral.ai/admin/billing-usage/subscriptions"
+    },
+    {
+      "status": 200,
+      "url": "https://developers.cloudflare.com/workers-ai/platform/pricing/"
+    },
+    {
+      "status": 403,
+      "url": "https://openai.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://claude.com/programs/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.anthropic.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://github.com/features/copilot/plans"
+    },
+    {
+      "status": 200,
+      "url": "https://windsurf.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://wandb.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://smith.langchain.com/pricing"
+    },
+    {
+      "status": 403,
+      "url": "https://www.make.com/en/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://n8n.io/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.nvidia.com/en-us/deep-learning-ai/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.pinecone.io/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.pinecone.io/startup-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://huggingface.co/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.activepieces.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://modal.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://fireworks.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://cohere.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://qdrant.tech/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.hubspot.com/pricing/crm"
+    },
+    {
+      "status": 200,
+      "url": "https://www.zoho.com/crm/zohocrm-pricing.html"
+    },
+    {
+      "status": 200,
+      "url": "https://www.freshworks.com/freshdesk/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.intercom.com/early-stage"
+    },
+    {
+      "status": 200,
+      "url": "https://www.zendesk.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://auth0.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.okta.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://clerk.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.waveapps.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://calendly.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://tally.so/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.brevo.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://mailchimp.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://asana.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://mercury.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.brex.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.apollo.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://slack.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://amplitude.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://mixpanel.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://coda.io/solutions/team-size/startups/apply-startup-credit"
+    },
+    {
+      "status": 200,
+      "url": "https://miro.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.helpscout.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.freshworks.com/company/partners/startup-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://resend.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://resend.com/yc"
+    },
+    {
+      "status": 200,
+      "url": "https://www.google.com/grants/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.google.com/nonprofits/offerings/workspace/"
+    },
+    {
+      "status": 200,
+      "url": "https://nonprofit.microsoft.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://slack.com/intl/en-us/help/articles/204368833"
+    },
+    {
+      "status": 200,
+      "url": "https://www.techsoup.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://stripe.com/atlas"
+    },
+    {
+      "status": 200,
+      "url": "https://mercury.com/perks"
+    },
+    {
+      "status": 200,
+      "url": "https://www.brex.com/perks"
+    },
+    {
+      "status": 200,
+      "url": "https://www.hubspot.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.salesforce.com/launchpad/"
+    },
+    {
+      "status": 403,
+      "url": "https://clickup.com/lp/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://slack.com/intl/en-us/help/articles/206646877"
+    },
+    {
+      "status": 200,
+      "url": "https://www.rippling.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://remote.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://support.airtable.com/articles/4920135568-applying-for-non-profit-education-and-student-airtable-plans"
+    },
+    {
+      "status": 200,
+      "url": "https://www.vanta.com/lp/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://education.github.com/pack"
+    },
+    {
+      "status": 200,
+      "url": "https://colab.research.google.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.kaggle.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.jetbrains.com/community/education/#students"
+    },
+    {
+      "status": 200,
+      "url": "https://azureforeducation.microsoft.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://aws.amazon.com/education/awseducate/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.anthropic.com/news/ai-for-science-program"
+    },
+    {
+      "status": 200,
+      "url": "https://cerebras.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://modal.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://edu.google.com/programs/credits/research/"
+    },
+    {
+      "status": 200,
+      "url": "https://aws.amazon.com/government-education/research-and-technical-computing/cloud-credit-for-research/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/research/academic-program/microsoft-azure-for-research/"
+    },
+    {
+      "status": 403,
+      "url": "https://www.mathworks.com/products/startups.html"
+    },
+    {
+      "status": 200,
+      "url": "https://api.nasa.gov/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation"
+    },
+    {
+      "status": 200,
+      "url": "https://posit.co/download/rstudio-desktop/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.wolfram.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://products.wolframalpha.com/api/"
+    },
+    {
+      "status": 200,
+      "url": "https://registry.opendata.aws/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.coursera.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.edx.org/"
+    },
+    {
+      "status": 200,
+      "url": "https://data.gov/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/education/products/office"
+    },
+    {
+      "status": 200,
+      "url": "https://fin.ai/startup-pack"
+    },
+    {
+      "status": 200,
+      "url": "https://retool.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://depot.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.framer.com/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://linear.app/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.confluent.io/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://customer.io/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://sendpulse.com/startup"
+    },
+    {
+      "status": 200,
+      "url": "https://replit.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://f.make.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://bubble.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://confidence.spotify.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://reducto.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://jam.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://lightfield.app/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://galaxycloud.app/partner-offer"
+    },
+    {
+      "status": 200,
+      "url": "https://www.tomorro.com/software/oro"
+    },
+    {
+      "status": 200,
+      "url": "https://gravatar.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://anam.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.databricks.com/product/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://konghq.com/solutions/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://startup.ovhcloud.com/en/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.daytona.io/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.daytona.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://livekit.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://devin.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://devin.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.baseten.co/startup-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.together.ai/startup-accelerator"
+    },
+    {
+      "status": 200,
+      "url": "https://www.anyscale.com/startup"
+    },
+    {
+      "status": 200,
+      "url": "https://deepinfra.com/deepstart"
+    },
+    {
+      "status": 200,
+      "url": "https://openrouter.ai/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://openrouter.ai/docs/api-reference/limits"
+    },
+    {
+      "status": 200,
+      "url": "https://openrouter.ai/openrouter/free"
+    },
+    {
+      "status": 200,
+      "url": "https://fal.ai/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://runware.ai/grant-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.runpod.io/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://startups.novita.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://novita.ai/docs/guides/sandbox-pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://novita.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.llamaindex.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.cerebras.ai/yc-startup-deal"
+    },
+    {
+      "status": 200,
+      "url": "https://www.speechmatics.com/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.speechmatics.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.cartesia.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://cartesia.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.resemble.ai/start/builders-grant-startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://telnyx.com/startups-program"
+    },
+    {
+      "status": 200,
+      "url": "https://smallest.ai/grants"
+    },
+    {
+      "status": 200,
+      "url": "https://pyai.com/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.byteplus.com/en/contact-us/vstart"
+    },
+    {
+      "status": 200,
+      "url": "https://fish.audio/startup/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.camb.ai/startup-grants"
+    },
+    {
+      "status": 200,
+      "url": "https://murf.ai/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.rime.ai/resources/announcing-our-5k-credits-program-for-yc-startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.rime.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://kiro.dev/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://kiro.dev/students/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.requesty.ai/startup"
+    },
+    {
+      "status": 200,
+      "url": "https://build.liner.com/blog/liner-startup-grant-program"
+    },
+    {
+      "status": 200,
+      "url": "https://liner.com/developers"
+    },
+    {
+      "status": 200,
+      "url": "https://startup.z.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.z.ai/guides/overview/pricing.md"
+    },
+    {
+      "status": 200,
+      "url": "https://regolo.ai/builder-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://gradium.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://free.ai/startup/"
+    },
+    {
+      "status": 200,
+      "url": "https://tryhakim.ai/en/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.sarvam.ai/startup-program"
+    },
+    {
+      "status": 200,
+      "url": "https://nebius.com/builders-terms-and-conditions"
+    },
+    {
+      "status": 200,
+      "url": "https://nebius.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.embercloud.ai/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://claude.com/contact-sales/claude-for-oss"
+    },
+    {
+      "status": 200,
+      "url": "https://developers.openai.com/community/codex-for-oss"
+    },
+    {
+      "status": 200,
+      "url": "https://www.coderabbit.ai/oss"
+    },
+    {
+      "status": 200,
+      "url": "https://claude.com/programs/team-plan-for-scientists"
+    },
+    {
+      "status": 200,
+      "url": "https://antigravity.google/use-cases/science"
+    },
+    {
+      "status": 200,
+      "url": "https://lambda.ai/research"
+    },
+    {
+      "status": 200,
+      "url": "https://azure.microsoft.com/en-us/free/students"
+    },
+    {
+      "status": 200,
+      "url": "https://developers.openai.com/community/students"
+    },
+    {
+      "status": 403,
+      "url": "https://chatgpt.com/students/2026/"
+    },
+    {
+      "status": 403,
+      "url": "https://openai.com/index/chatgpt-for-teachers/"
+    },
+    {
+      "status": 200,
+      "url": "https://gemini.google/students/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.notion.com/help/notion-for-education"
+    },
+    {
+      "status": 200,
+      "url": "https://www.notion.com/product/notion-for-education"
+    },
+    {
+      "status": 200,
+      "url": "https://www.firecrawl.dev/student-program"
+    },
+    {
+      "status": 200,
+      "url": "https://zed.dev/education"
+    },
+    {
+      "status": 200,
+      "url": "https://www.thundercompute.com/students"
+    },
+    {
+      "status": 200,
+      "url": "https://www.tinyfish.ai/students"
+    },
+    {
+      "status": 200,
+      "url": "https://www.upstage.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://cloud.google.com/free/docs/free-cloud-features"
+    },
+    {
+      "status": 200,
+      "url": "https://cloud.google.com/free"
+    },
+    {
+      "status": 200,
+      "url": "https://azure.microsoft.com/en-us/free/"
+    },
+    {
+      "status": 200,
+      "url": "https://modal.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://deepgram.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://e2b.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.pinecone.io/admin/billing/standard-trial"
+    },
+    {
+      "status": 200,
+      "url": "https://exa.ai/docs/admin/billing"
+    },
+    {
+      "status": 200,
+      "url": "https://exa.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.firecrawl.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.voyageai.com/docs/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.voyageai.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://jina.ai/en-US/reader/"
+    },
+    {
+      "status": 200,
+      "url": "https://jina.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.assemblyai.com/docs/billing-and-pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.assemblyai.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://gladia.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.scaleway.com/en/signup-trial/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.scaleway.com/en/pricing/model-as-a-service/"
+    },
+    {
+      "status": 200,
+      "url": "https://developer.amd.com/ai-developer-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.ibm.com/products/watsonx-ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://vercel.com/docs/ai-gateway/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.merge.dev/pricing/gateway"
+    },
+    {
+      "status": 200,
+      "url": "https://www.inceptionlabs.ai/blog/mercury-2-10x-free-tokens"
+    },
+    {
+      "status": 200,
+      "url": "https://www.inceptionlabs.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://viktor.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.mio.xyz/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.valyu.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.upstage.ai/pricing/studio"
+    },
+    {
+      "status": 200,
+      "url": "https://www.upstage.ai/blog/en/guide-1-upstage-console-api"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.sambanova.ai/docs/en/models/rate-limits"
+    },
+    {
+      "status": 200,
+      "url": "https://cloud.sambanova.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://developer.nvidia.com/nim"
+    },
+    {
+      "status": 200,
+      "url": "https://build.nvidia.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.hetzner.com/general/company-and-policy/experiments/inference/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.hetzner.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://opencode.ai/v2/docs/console/models/"
+    },
+    {
+      "status": 200,
+      "url": "https://opencode.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://freebuff.com/plans"
+    },
+    {
+      "status": 200,
+      "url": "https://cline.bot/"
+    },
+    {
+      "status": 200,
+      "url": "https://cursor.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.modelstudio.console.alibabacloud.com/en/model-studio/new-free-quota"
+    },
+    {
+      "status": 200,
+      "url": "https://www.alibabacloud.com/en/product/modelstudio"
+    },
+    {
+      "status": 200,
+      "url": "https://intl.cloud.tencent.com/document/product/1300/80423"
+    },
+    {
+      "status": 200,
+      "url": "https://intl.cloud.tencent.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://ai.baidu.com/ai-doc/AISTUDIO/Mmhslv9lf"
+    },
+    {
+      "status": 200,
+      "url": "https://ai.baidu.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.siliconflow.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.cohere.com/docs/rate-limits"
+    },
+    {
+      "status": 200,
+      "url": "https://ollama.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://ollama.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://elevenlabs.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://inworld.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.lemonfox.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://dev.hume.ai/docs/resources/billing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.hume.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.meshy.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://platform.stability.ai/docs/getting-started"
+    },
+    {
+      "status": 200,
+      "url": "https://platform.stability.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://ideogram.ai/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://runwayml.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://fal.ai/minimax-h3-max"
+    },
+    {
+      "status": 200,
+      "url": "https://replicate.com/collections/try-for-free"
+    },
+    {
+      "status": 200,
+      "url": "https://codiv.ai"
+    },
+    {
+      "status": 403,
+      "url": "https://nlpcloud.com/pricing.html"
+    },
+    {
+      "status": 200,
+      "url": "https://oncompute.ai/blog/ocean-network-inference-is-on-your-first-6-hours-are-on-us"
+    },
+    {
+      "status": 200,
+      "url": "https://oncompute.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://cerebralvalley.ai/e/meta-ai-developer-hackathon"
+    },
+    {
+      "status": 200,
+      "url": "https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-and-team-plans"
+    },
+    {
+      "status": 200,
+      "url": "https://www.ai21.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://inference-docs.cerebras.ai/support/rate-limits"
+    },
+    {
+      "status": 200,
+      "url": "https://www.arcee.ai/blog/introducing-the-trinity-builders-program"
+    },
+    {
+      "status": 200,
+      "url": "https://www.arcee.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.mixedbread.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.context.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://kilo.ai/docs/gateway/authentication"
+    },
+    {
+      "status": 200,
+      "url": "https://kilo.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.llm7.io/limits"
+    },
+    {
+      "status": 200,
+      "url": "https://llm7.io/"
+    },
+    {
+      "status": 200,
+      "url": "https://anyapi.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://aibridge-api.com/pricing.html"
+    },
+    {
+      "status": 200,
+      "url": "https://inferall.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://mindshub.ai/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://learn.chatgpt.com/docs/pricing"
+    },
+    {
+      "status": 403,
+      "url": "https://chatgpt.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://aws.amazon.com/polly/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://docs.tripo3d.ai/get-started/pricing.html"
+    },
+    {
+      "status": 403,
+      "url": "https://www.tripo3d.ai/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.vidu.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://hailuoai.video/doc/payment-policy.html"
+    },
+    {
+      "status": 200,
+      "url": "https://hailuoai.video/"
+    },
+    {
+      "status": 200,
+      "url": "https://dphn.ai/API/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.yepapi.com/ai-api"
+    },
+    {
+      "status": 200,
+      "url": "https://aerolink.lat/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://thesmartoken.com/campaign/free-credit"
+    },
+    {
+      "status": 200,
+      "url": "https://www.snowflake.com/en/WHY-SNOWFLAKE/STARTUPS/"
+    },
+    {
+      "status": 200,
+      "url": "https://supabase.com/partners"
+    },
+    {
+      "status": 200,
+      "url": "https://clickhouse.com/startup-offer"
+    },
+    {
+      "status": 200,
+      "url": "https://www.cockroachlabs.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://weaviate.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://zilliz.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://motherduck.com/pricing/"
+    },
+    {
+      "status": 403,
+      "url": "https://www.vultr.com/company/startups/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.scaleway.com/en/startup-program/"
+    },
+    {
+      "status": 200,
+      "url": "https://temporal.io/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://www.inngest.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://trigger.dev/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://workos.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://stytch.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.honeycomb.io/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://axiom.co/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://betterstack.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.checklyhq.com/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.doppler.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://infisical.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://snyk.io/plans/"
+    },
+    {
+      "status": 200,
+      "url": "https://vercel.com/open-source-program"
+    },
+    {
+      "status": 200,
+      "url": "https://blog.cloudflare.com/expanding-our-support-for-oss-projects-with-project-alexandria/"
+    },
+    {
+      "status": 200,
+      "url": "https://github.com/1Password/for-open-source"
+    },
+    {
+      "status": 200,
+      "url": "https://tailscale.com/kb/1184/opensource"
+    },
+    {
+      "status": 403,
+      "url": "https://docsearch.algolia.com/apply/"
+    },
+    {
+      "status": 200,
+      "url": "https://docsearch.algolia.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.docker.com/community/open-source/application/"
+    },
+    {
+      "status": 200,
+      "url": "https://ramp.com/rewards"
+    },
+    {
+      "status": 200,
+      "url": "https://ramp.com/"
+    },
+    {
+      "status": 200,
+      "url": "https://segment.com/industry/startups/"
+    },
+    {
+      "status": 403,
+      "url": "https://carta.com/launch/"
+    },
+    {
+      "status": 200,
+      "url": "https://pulley.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.deel.com/the-pitch-by-deel/founders-perks/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.deel.com/"
+    },
+    {
+      "status": 403,
+      "url": "https://gusto.com/partners/startups"
+    },
+    {
+      "status": 403,
+      "url": "https://gusto.com/"
+    },
+    {
+      "status": 403,
+      "url": "https://drata.com/product/startups"
+    },
+    {
+      "status": 200,
+      "url": "https://cal.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://documenso.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://dub.co/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://loops.so/pricing"
+    },
+    {
+      "status": 403,
+      "url": "https://webflow.com/for/startups"
+    },
+    {
+      "status": 403,
+      "url": "https://webflow.com/for/classroom"
+    },
+    {
+      "status": 200,
+      "url": "https://www.mux.com/pricing"
+    },
+    {
+      "status": 200,
+      "url": "https://www.daily.co/pricing/"
+    },
+    {
+      "status": 200,
+      "url": "https://www.loom.com/education"
+    },
+    {
+      "status": 200,
+      "url": "https://miro.com/education-whiteboard/"
+    }
+  ]
+}

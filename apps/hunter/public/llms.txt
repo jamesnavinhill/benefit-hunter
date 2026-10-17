@@ -1,0 +1,33 @@
+# Benefit Hunter
+
+> Free tool and setup kit that helps founders find, qualify for, and apply to startup
+> benefit programs — cloud credits, community licenses, and partner discounts — in the
+> order that maximizes referral leverage. Runs entirely in the browser; no account
+> required; optional Supabase sync.
+
+A curated overview of the main entry points follows.
+
+## App
+
+- [Benefit Hunter app](https://benefits.navinhill.com/): interactive catalog of
+  startup benefit programs with a matching profile, guided umbrella-first application
+  order, real-dollars-by-stack totals, and per-program AI application drafts.
+
+## Setup kit
+
+- [Automation Kit](https://benefits.navinhill.com/automation-kit/): sanitized
+  starter repo (zip) tracking your own startup credits and free tiers, with an
+  optional self-serve Google Apps Script Gmail-to-Sheet registry-sync add-on.
+
+## Source code
+
+- [GitHub: jamesnavinhill/benefit-hunter](https://github.com/jamesnavinhill/benefit-hunter):
+  public monorepo — Vite/React app under `apps/hunter/`, durable docs under `docs/`
+  (catalog schema and data model in `docs/architecture/`, deployment in
+  `docs/operations/`).
+
+## Data freshness
+
+Program values, eligibility, and URLs are sourced and dated in
+`apps/hunter/scripts/` and `docs/reference/` of the repository. Programs change —
+confirm terms on each vendor's official page before applying.

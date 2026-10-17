@@ -9,10 +9,10 @@ steps; this doc holds the durable target and rules.
 
 ## Repository
 
-- **Host:** GitHub `studio-jami` org (james@jami.studio identity).
+- **Host:** GitHub `jamesnavinhill/benefit-hunter` (james@jami.studio identity).
 - **Visibility:** public.
 - **Local path:** `C:\Users\james\orgs\oss\benefit-hunter`.
-- **Deploy:** Vercel (Jami Studio team) → `benefits.jami.studio`. See
+- **Deploy:** Vercel (Jami Studio team) → `benefits.navinhill.com`. See
   [operations/deployment-and-domains.md](../operations/deployment-and-domains.md).
 
 Because the repo is public, the private admin material is gitignored and the raw

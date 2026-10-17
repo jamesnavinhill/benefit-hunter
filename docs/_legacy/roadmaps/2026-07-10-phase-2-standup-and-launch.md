@@ -4,7 +4,7 @@ Date: 2026-07-10
 Status: [x] Complete (2026-07-10)
 Source reports: `docs/product/vision-and-scope.md`, `docs/architecture/repo-and-monorepo.md`, `docs/security/privacy-and-secrets.md`
 Owner: Jami Studio
-Surface: `C:\Users\james\orgs\oss\benefit-hunter`, GitHub `studio-jami`, Vercel Jami Studio team, `benefits.jami.studio`
+Surface: `C:\Users\james\orgs\oss\benefit-hunter`, GitHub `jamesnavinhill/benefit-hunter`, Vercel Jami Studio team, `benefits.jami.studio`
 
 ## Purpose
 
@@ -37,7 +37,7 @@ build on.
 
 ## Locked Decisions
 
-- Public GitHub repo `studio-jami/benefit-hunter`; deploy via Vercel Jami Studio team.
+- Public GitHub repo `jamesnavinhill/benefit-hunter`; deploy via Vercel Jami Studio team.
 - Deployable app path is `apps/hunter` (renamed from `apps/web`).
 - `_ops/` is gitignored in full; raw `.env*` files are relocated out of the repo
   before `git init`.
@@ -222,7 +222,7 @@ Implementation tasks:
 
 - [x] `git init` at the repo root; set default branch.
 - [x] Stage and review; confirm no `_ops/` or `.env*` (except examples) is staged.
-- [x] Create `studio-jami/benefit-hunter` (public) and set the remote.
+- [x] Create `jamesnavinhill/benefit-hunter` (public) and set the remote.
 - [x] Commit and push the baseline.
 
 Exit criteria:
@@ -245,7 +245,7 @@ Depends on:
 
 Implementation tasks:
 
-- [x] Import `studio-jami/benefit-hunter` into the Jami Studio Vercel team.
+- [x] Import `jamesnavinhill/benefit-hunter` into the Jami Studio Vercel team.
 - [x] Set Root Directory `apps/hunter`, framework Vite, build `npm run build`,
       output `dist`.
 - [x] Add `benefits.jami.studio` as a custom domain; set the Cloudflare DNS record.
@@ -272,7 +272,7 @@ Suggested verification:
 
 ## Acceptance Criteria
 
-- The current Benefit Hunter app is public at `studio-jami/benefit-hunter` and live at
+- The current Benefit Hunter app is public at `jamesnavinhill/benefit-hunter` and live at
   `benefits.jami.studio`, with local-storage persistence, correct branding, a clean
   monorepo layout, and zero secret exposure.
 

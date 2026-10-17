@@ -10,10 +10,10 @@ the one-time standup steps; this doc holds the durable operating configuration.
 
 | Concern | Value |
 | --- | --- |
-| GitHub org | `studio-jami` (identity james@jami.studio) |
-| GitHub repo | `studio-jami/benefit-hunter` (public) |
+| GitHub org / owner | `jamesnavinhill` (identity james@jami.studio) |
+| GitHub repo | `jamesnavinhill/benefit-hunter` (public) |
 | Vercel team | Jami Studio team |
-| Production domain | `benefits.jami.studio` |
+| Production domain | `benefits.navinhill.com` |
 | Studio site (funnel target) | `www.jami.studio` |
 
 DNS for `jami.studio` is managed in Cloudflare (Jami Studio account). The
@@ -47,11 +47,11 @@ Because the deployable app lives in a monorepo subdirectory, set the Vercel proj
 
 ## Domain routing
 
-- `benefits.jami.studio` → Vercel production deployment of `studio-jami/benefit-hunter`.
+- `benefits.navinhill.com` → Vercel production deployment of `jamesnavinhill/benefit-hunter`.
 - In-app external links use `www.jami.studio` for the studio funnel and the official
   vendor apply/marketing URLs from the catalog.
 - If a temporary Vercel preview domain is used pre-cutover, add a redirect to the
-  canonical `benefits.jami.studio` once the custom domain is live.
+  canonical `benefits.navinhill.com` once the custom domain is live.
 
 ## Analytics
 
@@ -62,8 +62,8 @@ the funnel without a decision.
 
 ## Release flow
 
-1. Merge to the default branch on `studio-jami/benefit-hunter`.
-2. Vercel builds `apps/hunter` and deploys to `benefits.jami.studio`.
+1. Merge to the default branch on `jamesnavinhill/benefit-hunter`.
+2. Vercel builds `apps/hunter` and deploys to `benefits.navinhill.com`.
 3. Data changes (catalog, real-awards artifact) ship as normal commits; there is no
    separate data pipeline at launch.
 4. To verify a deploy landed, request the domain with a cache-busting query

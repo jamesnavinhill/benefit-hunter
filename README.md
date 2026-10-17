@@ -4,7 +4,7 @@ A free tool and setup kit that helps founders find, qualify for, and apply to st
 benefit programs — credits, community licenses, and worthy discounts — and apply to
 them in the order that maximizes referral leverage.
 
-Live at **[benefit-hunter.vercel.app](https://benefit-hunter.vercel.app)**.
+Live at **[benefits.navinhill.com](https://benefits.navinhill.com)**.
 
 ## What it does
 

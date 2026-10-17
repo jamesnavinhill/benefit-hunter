@@ -34,7 +34,7 @@ export const TOKEN_LABELS = {
 };
 
 export const DEFAULT_ACCENTS = {
-  "accent":         { l: 0.78, c: 0.16,  h: 75  },
+  "accent":         { l: 0.555, c: 0.190, h: 342.0 },
   "gold":           { l: 0.83, c: 0.17,  h: 85  },
   "match":          { l: 0.78, c: 0.18,  h: 150 },
   "ok":             { l: 0.74, c: 0.16,  h: 148 },
