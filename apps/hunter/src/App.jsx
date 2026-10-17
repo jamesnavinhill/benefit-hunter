@@ -355,6 +355,30 @@ export default function App() {
             </div>
           </div>
 
+          <nav className="opportunity-tabs" role="tablist" aria-label="Opportunity type">
+            {OPPORTUNITY_CATEGORIES.map(({ id, label }) => {
+              const count = CATEGORY_COUNTS[id];
+              const totals = CATEGORY_TOTALS[id];
+              const active = browseCategory === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setBrowseCategory(id)}
+                  className={"opportunity-tab" + (active ? " active" : "")}
+                >
+                  <span className="opportunity-tab-label">{label}</span>
+                  <span className="opportunity-tab-sub">
+                    <span className="opportunity-tab-count">{count}</span>
+                    <span className="opportunity-tab-value">{formatCategoryValue(totals.tier1CountedValue)}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+
           <HeaderMenu
             onlyForMe={onlyForMe}
             onToggleForMe={() => setOnlyForMe(value => !value)}
@@ -370,27 +394,6 @@ export default function App() {
             onSignOut={signOut}
           />
         </div>
-        <nav className="opportunity-tabs" role="tablist" aria-label="Opportunity type">
-          {OPPORTUNITY_CATEGORIES.map(({ id, label }) => {
-            const count = CATEGORY_COUNTS[id];
-            const totals = CATEGORY_TOTALS[id];
-            const active = browseCategory === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => setBrowseCategory(id)}
-                className={"opportunity-tab" + (active ? " active" : "")}
-              >
-                <span>{label}</span>
-                <span className="opportunity-tab-count">{count}</span>
-              <span className="opportunity-tab-value">{formatCategoryValue(totals.tier1CountedValue)}</span>
-              </button>
-            );
-          })}
-        </nav>
 
         {/* STATS */}
         <div className={"stats-strip" + (statsExpanded ? " expanded" : "")}>
