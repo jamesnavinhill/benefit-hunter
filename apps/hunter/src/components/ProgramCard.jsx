@@ -1,29 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LANE_COLORS } from "../data/lanes";
 import { STATUS_CONFIG } from "../data/statuses";
 import { agentState, getAgentTask } from "../lib/agent";
-import { getApplicationReadiness, getFieldMeta } from "../data/profile";
+import { getFieldMeta } from "../data/profile";
 import { toneStyle } from "../lib/tone";
 import { Badge } from "./Badge";
 import { AccessBadge } from "./AccessBadge";
 
-// Cascaded primary status chip — collapses 4 signals (agent state, readiness,
-// for-you match, risk) into one. Risk wins, then submit/draft/research.
-function statusChip({ program, profileDoc }) {
-  const isStale = program.tags.includes("stale");
-  const hasBillingRisk = program.tags.includes("billing_risk");
-
-  if (hasBillingRisk) return { label: "Billing Risk", tone: "stop" };
-  if (isStale)        return { label: "Verify First", tone: "wait" };
-
-  const ag = agentState(program);
-  const r  = getApplicationReadiness(program, profileDoc || {});
-  const suffix = r.status === "none" || r.status === "ready" ? "" : ` · ${r.filled}/${r.needed}`;
-  return { label: ag.label + suffix, tone: ag.tone };
-}
-
-export function ProgramCard({ program, status, onStatusChange, onVendorClick, profileDoc }) {
-  const [botOpen, setBotOpen] = useState(false);
+export function ProgramCard({ program, status, onStatusChange, profileDoc }) {
+  const [infoOpen, setInfoOpen] = useState(false);
 
   // Quick Draft: AI-generated application packet (gateway-backed serverless fn)
   const [draftText, setDraftText] = useState(null);
@@ -50,18 +35,23 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
       setDrafting(false);
     }
   };
+
+  useEffect(() => {
+    if (!infoOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") setInfoOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [infoOpen]);
+
   const lc = LANE_COLORS[program.lane];
   const sc = STATUS_CONFIG[status];
   const ag = agentState(program);
-  const hasBillingRisk = program.tags.includes("billing_risk");
-  const isStale = program.tags.includes("stale");
-  const hasDeps = program.dependencies && program.dependencies.length > 0;
-  const chip = statusChip({ program, profileDoc });
-  const chipStyle = toneStyle(chip.tone);
   const laneTone = lc?.tone;
 
-  // Access badges shown inline; "ANY" carries no info, hide it.
-  const accessVisible = program.access.filter(a => a !== "ANY");
+  // Pills: category + up to two access paths. "ANY" carries no info, hide it.
+  // One row only, never wraps — overflow is clipped rather than shifting layout.
+  const accessVisible = program.access.filter(a => a !== "ANY").slice(0, 2);
+  const hasDeps = program.dependencies && program.dependencies.length > 0;
 
   // Vendor favicon — derive from apply URL.
   const vendorDomain = (() => {
@@ -70,16 +60,16 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
   })();
 
   return (
-    <div style={{
+    <div className="program-card" style={{
       position: "relative",
       background: "var(--surface)",
       border: "1px solid " + (
-        hasBillingRisk ? "color-mix(in oklch, var(--stop) 32%, transparent)" :
-        isStale        ? "var(--line)" :
+        program.tags.includes("billing_risk") ? "color-mix(in oklch, var(--stop) 32%, transparent)" :
+        program.tags.includes("stale")        ? "var(--line)" :
         `color-mix(in oklch, var(--${laneTone}) 24%, transparent)`
       ),
       borderRadius:4, padding:"16px 16px 14px",
-      display:"flex", flexDirection:"column", gap:11,
+      display:"flex", flexDirection:"column", gap:10,
       minHeight: 0,
     }}>
 
@@ -100,177 +90,163 @@ export function ProgramCard({ program, status, onStatusChange, onVendorClick, pr
         />
       )}
 
-      {/* ROW 1 — Identity: Tier · Lane · Vendor (right side reserved for favicon) */}
-      <div style={{ display:"flex", flexWrap:"wrap", gap:5, alignItems:"center", paddingRight: vendorDomain ? 36 : 0 }}>
-        <Badge
-          label={"T" + program.tier + " " + (program.tier===1?"FREE":"DISC")}
-          tone={program.tier===1 ? "accent" : null}
-        />
+      {/* ROW 1 — Pills: category + access. Fixed height, single row, clipped. */}
+      <div className="pill-row" style={{ paddingRight: vendorDomain ? 36 : 0 }}>
         <Badge label={program.lane} tone={laneTone} />
-        <span
-          onClick={(e) => { e.stopPropagation(); onVendorClick && onVendorClick(program.vendor); }}
-          style={{
-            fontSize:8, fontWeight:600, letterSpacing:"0.08em", textTransform:"uppercase",
-            color:"var(--text-dim)", background:"transparent", border:"1px solid var(--line)",
-            padding:"2px 6px", borderRadius:2, whiteSpace:"nowrap",
-            cursor: onVendorClick ? "pointer" : "default",
-            transition:"color 0.15s, border-color 0.15s",
-          }}
-          title={onVendorClick ? "Click to filter by this vendor" : ""}
-          onMouseEnter={(e) => { if (onVendorClick) { e.currentTarget.style.color = "var(--info)"; e.currentTarget.style.borderColor = "color-mix(in oklch, var(--info) 33%, transparent)"; }}}
-          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-dim)"; e.currentTarget.style.borderColor = "var(--line)"; }}
-        >@{program.vendor}</span>
-      </div>
-
-      {/* ROW 2 — Eligibility (access) + single status chip — under identity, above title */}
-      <div style={{ display:"flex", gap:5, alignItems:"center", flexWrap:"wrap" }}>
         {accessVisible.map(a => <AccessBadge key={a} accessKey={a} />)}
-        <span style={{
-          fontSize:8, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase",
-          color: chipStyle.color, background: chipStyle.bg, border: "1px solid " + chipStyle.border,
-          padding:"3px 7px", borderRadius:3, marginLeft: accessVisible.length ? 2 : 0,
-        }}>
-          {chip.label}
-        </span>
       </div>
 
-      {/* ROW 3 — Name (strip parenthetical suffixes for cleaner reads) */}
-      <div style={{ fontSize:14, fontWeight:700, color:"var(--text)", letterSpacing:"-0.01em", lineHeight:1.3 }}>
+      {/* ROW 2 — Name. Two-line fixed zone so subtext starts at the same
+          vertical position on every card, in every row. */}
+      <div className="card-title">
         {program.name.replace(/\s*\([^)]*\)\s*$/, "")}
       </div>
 
-      {/* ROW 4 — Summary */}
-      <div style={{ fontSize:11, color:"var(--text-dim)", lineHeight:1.55 }}>
+      {/* ROW 3 — Summary. Three-line fixed zone; longer copy ellipsizes (full
+          text lives in the info dialogue). */}
+      <div className="card-desc">
         {program.description}
       </div>
 
-      {/* Dependencies (if any) */}
-      {hasDeps && (
-        <div style={{ fontSize:9, color:"var(--info)", fontFamily:"monospace" }}>
-          ↳ depends on: {program.dependencies.join(", ")}
+      {/* BOTTOM ZONE — divider, value, actions. Bottom-locked via margin-top:
+          auto so nothing above can ever shift it; identical height on every
+          card keeps the divider uniform across each grid row. */}
+      <div style={{ marginTop:"auto" }}>
+        <div className="program-value-line" aria-label="Estimated offer value">
+          <span className="program-value-label">{program.value?.label || "Value not stated"}</span>
+          {program.value?.counted && Number(program.value.estimate) > 0 && (
+            <strong>{new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(program.value.estimate)}</strong>
+          )}
+          {program.value?.counted && !program.value.cashLike && <small>in-kind</small>}
+          {!program.value?.counted && <small>not in totals</small>}
         </div>
-      )}
 
-      <div className="program-value-line" aria-label="Estimated offer value">
-        <span>{program.value?.label || "Value not stated"}</span>
-        {program.value?.counted && Number(program.value.estimate) > 0 && (
-          <strong>{new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(program.value.estimate)}</strong>
-        )}
-        {program.value?.counted && !program.value.cashLike && <small>in-kind estimate</small>}
-        {!program.value?.counted && <small>not included in totals</small>}
+        <div style={{ display:"flex", gap:7, alignItems:"center", paddingTop:9 }}>
+          <a href={program.urls.apply} target="_blank" rel="noopener noreferrer" style={{
+            fontSize:9, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase",
+            color:"var(--action-text)", background:"var(--neutral-action)",
+            padding:"5px 11px", borderRadius:3, textDecoration:"none", flexShrink:0,
+          }}>Apply →</a>
+          {(() => {
+            const ss = toneStyle(sc.tone);
+            return (
+              <select value={status} onChange={e => onStatusChange(program.id, e.target.value)} style={{
+                flex:1, fontSize:10, fontWeight:600, minWidth:0,
+                background: status === "not_applied" ? "var(--surface-2)" : ss.bg,
+                color: ss.color,
+                border: "1px solid " + (status === "not_applied" ? "var(--line)" : "transparent"),
+                borderRadius:3, padding:"4px 7px",
+                appearance:"none", cursor:"pointer", fontFamily:"monospace", outline:"none",
+              }}>
+                {Object.entries(STATUS_CONFIG).map(([k, v]) => (
+                  <option key={k} value={k} style={{ background:"var(--line-soft)" }}>{v.label}</option>
+                ))}
+              </select>
+            );
+          })()}
+          <button onClick={() => setInfoOpen(true)} title="More information" aria-haspopup="dialog" style={{
+            background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim3)",
+            borderRadius:3, padding:"4px 8px", cursor:"pointer", fontSize:9,
+            fontFamily:"monospace", letterSpacing:"0.06em", flexShrink:0,
+          }}>info</button>
+        </div>
       </div>
 
-      {/* ROW 5 — Actions — pinned to bottom */}
-      <div style={{ display:"flex", gap:7, alignItems:"center", marginTop:"auto", paddingTop:4 }}>
-        <a href={program.urls.apply} target="_blank" rel="noopener noreferrer" style={{
-          fontSize:9, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase",
-          color:"var(--action-text)", background:"var(--neutral-action)",
-          padding:"5px 11px", borderRadius:3, textDecoration:"none", flexShrink:0,
-        }}>Apply →</a>
-        {(() => {
-          const ss = toneStyle(sc.tone);
-          return (
-            <select value={status} onChange={e => onStatusChange(program.id, e.target.value)} style={{
-              flex:1, fontSize:10, fontWeight:600,
-              background: status === "not_applied" ? "var(--surface-2)" : ss.bg,
-              color: ss.color,
-              border: "1px solid " + (status === "not_applied" ? "var(--line)" : "transparent"),
-              borderRadius:3, padding:"4px 7px",
-              appearance:"none", cursor:"pointer", fontFamily:"monospace", outline:"none",
-            }}>
-              {Object.entries(STATUS_CONFIG).map(([k, v]) => (
-                <option key={k} value={k} style={{ background:"var(--line-soft)" }}>{v.label}</option>
-              ))}
-            </select>
-          );
-        })()}
-        <button onClick={() => setBotOpen(o => !o)} style={{
-          background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim3)",
-          borderRadius:3, padding:"4px 8px", cursor:"pointer", fontSize:9,
-          fontFamily:"monospace", letterSpacing:"0.06em", flexShrink:0,
-        }}>{botOpen ? "cfg ▲" : "cfg ▼"}</button>
-      </div>
+      {/* INFO DIALOGUE — centered, overlay + blur. All demoted detail lives
+          here instead of a layout-shifting expansion. */}
+      {infoOpen && (
+        <div className="info-overlay" onClick={() => setInfoOpen(false)} role="presentation">
+          <div className="info-dialogue" role="dialog" aria-modal="true" aria-label={`${program.name} details`} onClick={e => e.stopPropagation()}>
+            <div className="info-dialogue-head">
+              <div style={{ minWidth:0 }}>
+                <div className="info-dialogue-title">{program.name.replace(/\s*\([^)]*\)\s*$/, "")}</div>
+                <div className="info-dialogue-sub">{program.vendor} · {program.type}</div>
+              </div>
+              <button className="info-dialogue-close" onClick={() => setInfoOpen(false)} aria-label="Close">✕</button>
+            </div>
 
-      {/* BOT CONFIG PANEL — contains all demoted detail: type, task, tags, eligibility, fields */}
-      {botOpen && (
-        <div style={{
-          background:"var(--surface-2)", borderTop:"1px solid var(--line-soft)",
-          margin:"4px -15px -14px", padding:"10px 15px",
-          borderRadius:"0 0 4px 4px",
-          fontFamily:"monospace", fontSize:9, lineHeight:1.7,
-        }}>
-          <div style={{ color:"var(--text-dim)", fontWeight:700, marginBottom:4, letterSpacing:"0.08em" }}>// AGENT CONFIG</div>
-          <div><span style={{ color:"var(--text-dim2)" }}>state</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color: `var(--${ag.tone})` }}>{ag.label.toLowerCase()}</span></div>
-          <div><span style={{ color:"var(--text-dim2)" }}>task</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{getAgentTask(program).label.toLowerCase()}</span></div>
-          <div><span style={{ color:"var(--text-dim2)" }}>type</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.type}</span></div>
-          <div><span style={{ color:"var(--text-dim2)" }}>platform</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.formConfig.platform}</span></div>
-          <div><span style={{ color:"var(--text-dim2)" }}>fields</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text)" }}>{program.formConfig.fields.length > 0 ? program.formConfig.fields.join(", ") : "standard email signup"}</span></div>
-          <div style={{ marginTop:6, paddingTop:6, borderTop:"1px dashed var(--line)" }}>
-            <span style={{ color:"var(--text-dim2)" }}>access</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.access.join(" OR ")}</span>
-          </div>
-          <div><span style={{ color:"var(--text-dim2)" }}>tags</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.tags.join(" | ") || "—"}</span></div>
-          <div style={{ marginTop:6, paddingTop:6, borderTop:"1px dashed var(--line)" }}>
-            <span style={{ color:"var(--text-dim2)" }}>eligible</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)", fontFamily:"inherit" }}>{program.eligibility}</span>
-          </div>
-          <div style={{ marginTop:6, paddingTop:6, borderTop:"1px dashed var(--line)" }}>
-            <span style={{ color:"var(--gold)" }}>value</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.value?.label || "not stated"} · {program.value?.cashLike ? "cash-like" : "in-kind"} · {program.value?.counted ? "counted" : "uncounted"}</span>
-          </div>
-          <div><span style={{ color:"var(--text-dim2)" }}>verified</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)" }}>{program.lastVerified}</span></div>
-          <div style={{ marginTop:4 }}><span style={{ color:"var(--text-dim2)" }}>url</span><span style={{ color:"var(--text-dim3)" }}> → </span><span style={{ color:"var(--text-dim)", wordBreak:"break-all" }}>{program.urls.apply}</span></div>
-          {program.formConfig.fields && program.formConfig.fields.length > 0 && (
-            <div style={{ marginTop:8, paddingTop:8, borderTop:"1px solid var(--line-soft)" }}>
-              <div style={{ color:"var(--text-dim)", fontWeight:700, marginBottom:5, letterSpacing:"0.08em" }}>// APPLICATION DATA</div>
-              {program.formConfig.fields.map(k => {
-                const v = (profileDoc || {})[k];
-                const ok = v && String(v).trim();
-                const meta = getFieldMeta(k);
-                return (
-                  <div key={k} style={{ display:"flex", gap:6, fontSize:9, marginBottom:2 }}>
-                    <span style={{ color: ok ? "var(--ok)" : "var(--stop)", width:10, flexShrink:0 }}>{ok ? "✓" : "○"}</span>
-                    <span style={{ color:"var(--text-dim)", minWidth:130, flexShrink:0 }}>{meta.label}</span>
-                    <span style={{ color:"var(--text-dim3)", flexShrink:0 }}>→</span>
-                    <span style={{
-                      color: ok ? "var(--text)" : "var(--text-dim3)",
-                      fontStyle: ok ? "normal" : "italic",
-                      overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
-                    }}>{ok ? String(v).slice(0, 80) : "not filled"}</span>
+            <div className="info-dialogue-body">
+              <div className="info-sec">
+                <div className="info-sec-label">// PLAN</div>
+                <div className="info-kv"><span>state</span><em style={{ color:`var(--${ag.tone})` }}>{ag.label.toLowerCase()}</em></div>
+                <div className="info-kv"><span>task</span><em>{getAgentTask(program).label.toLowerCase()}</em></div>
+                <div className="info-kv"><span>platform</span><em>{program.formConfig.platform}</em></div>
+                <div className="info-kv"><span>fields</span><em>{program.formConfig.fields.length > 0 ? program.formConfig.fields.join(", ") : "standard email signup"}</em></div>
+                {hasDeps && <div className="info-kv"><span>depends on</span><em style={{ color:"var(--info)" }}>{program.dependencies.join(", ")}</em></div>}
+              </div>
+
+              <div className="info-sec">
+                <div className="info-sec-label">// OFFER</div>
+                <div className="info-kv"><span>value</span><em style={{ color:"var(--gold)" }}>{program.value?.label || "not stated"}</em></div>
+                <div className="info-kv"><span>kind</span><em>{program.value?.cashLike ? "cash-like" : "in-kind"} · {program.value?.counted ? "counted in totals" : "not counted"}</em></div>
+              </div>
+
+              <div className="info-sec">
+                <div className="info-sec-label">// ELIGIBILITY</div>
+                <div style={{ fontSize:10, lineHeight:1.6, color:"var(--text-dim)" }}>{program.eligibility}</div>
+                <div className="info-kv" style={{ marginTop:6 }}><span>access</span><em>{program.access.join(" OR ")}</em></div>
+                <div className="info-kv"><span>tags</span><em>{program.tags.join(" | ") || "—"}</em></div>
+              </div>
+
+              {program.formConfig.fields && program.formConfig.fields.length > 0 && (
+                <div className="info-sec">
+                  <div className="info-sec-label">// APPLICATION DATA</div>
+                  {program.formConfig.fields.map(k => {
+                    const v = (profileDoc || {})[k];
+                    const ok = v && String(v).trim();
+                    const meta = getFieldMeta(k);
+                    return (
+                      <div key={k} className="info-field">
+                        <span style={{ color: ok ? "var(--ok)" : "var(--stop)" }}>{ok ? "✓" : "○"}</span>
+                        <span className="info-field-label">{meta.label}</span>
+                        <span style={{
+                          color: ok ? "var(--text)" : "var(--text-dim3)",
+                          fontStyle: ok ? "normal" : "italic",
+                          overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+                        }}>{ok ? String(v).slice(0, 80) : "not filled"}</span>
+                      </div>
+                    );
+                  })}
+                  <div style={{ display:"flex", gap:6, marginTop:9, flexWrap:"wrap" }}>
+                    <button onClick={() => {
+                      const data = {};
+                      for (const k of program.formConfig.fields) data[k] = (profileDoc || {})[k] || "";
+                      const text = JSON.stringify(data, null, 2);
+                      if (navigator.clipboard) navigator.clipboard.writeText(text);
+                    }} style={{
+                      background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim)",
+                      padding:"3px 10px", borderRadius:2, cursor:"pointer", fontSize:9,
+                      fontFamily:"monospace", letterSpacing:"0.05em",
+                    }}>
+                      Copy as JSON
+                    </button>
+                    <button onClick={handleQuickDraft} disabled={drafting} style={{
+                      background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim)",
+                      padding:"3px 10px", borderRadius:2, cursor: drafting ? "wait" : "pointer", fontSize:9,
+                      fontFamily:"monospace", letterSpacing:"0.05em", opacity: drafting ? 0.5 : 1,
+                    }}>
+                      {drafting ? "Drafting…" : "✎ Quick Draft (AI)"}
+                    </button>
                   </div>
-                );
-              })}
-              <button onClick={(e) => {
-                e.stopPropagation();
-                const data = {};
-                for (const k of program.formConfig.fields) data[k] = (profileDoc || {})[k] || "";
-                const text = JSON.stringify(data, null, 2);
-                if (navigator.clipboard) navigator.clipboard.writeText(text);
-              }} style={{
-                marginTop:6, background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim)",
-                padding:"3px 10px", borderRadius:2, cursor:"pointer", fontSize:9,
-                fontFamily:"monospace", letterSpacing:"0.05em",
-              }}>
-                Copy as JSON
-              </button>
-              <button onClick={(e) => {
-                e.stopPropagation();
-                handleQuickDraft();
-              }} disabled={drafting} style={{
-                marginTop:6, marginLeft:6, background:"transparent", border:"1px solid var(--line)", color:"var(--text-dim)",
-                padding:"3px 10px", borderRadius:2, cursor: drafting ? "wait" : "pointer", fontSize:9,
-                fontFamily:"monospace", letterSpacing:"0.05em", opacity: drafting ? 0.5 : 1,
-              }}>
-                {drafting ? "Drafting…" : "✎ Quick Draft (AI)"}
-              </button>
-              {draftError && (
-                <div style={{ marginTop:6, color:"var(--stop)", fontSize:9 }}>{draftError}</div>
-              )}
-              {draftText && (
-                <div style={{ marginTop:8, paddingTop:8, borderTop:"1px solid var(--line-soft)" }}>
-                  <div style={{ color:"var(--text-dim)", fontWeight:700, marginBottom:5, letterSpacing:"0.08em" }}>// AI DRAFT (copied to clipboard)</div>
-                  <pre style={{ whiteSpace:"pre-wrap", color:"var(--text-dim2)", fontSize:8.5, margin:0, maxHeight:260, overflowY:"auto" }}>{draftText}</pre>
+                  {draftError && <div style={{ marginTop:6, color:"var(--stop)", fontSize:9 }}>{draftError}</div>}
+                  {draftText && (
+                    <div style={{ marginTop:8, paddingTop:8, borderTop:"1px solid var(--line-soft)" }}>
+                      <div className="info-sec-label">// AI DRAFT (copied to clipboard)</div>
+                      <pre style={{ whiteSpace:"pre-wrap", color:"var(--text-dim2)", fontSize:8.5, margin:0, maxHeight:220, overflowY:"auto" }}>{draftText}</pre>
+                    </div>
+                  )}
                 </div>
               )}
+
+              <div className="info-sec" style={{ marginBottom:0 }}>
+                <div className="info-sec-label">// SOURCE</div>
+                <div className="info-kv"><span>url</span><em style={{ wordBreak:"break-all" }}>
+                  <a href={program.urls.apply} target="_blank" rel="noopener noreferrer" style={{ color:"var(--info)", textDecoration:"none" }}>{program.urls.apply}</a>
+                </em></div>
+                <div className="info-kv"><span>verified</span><em>{program.lastVerified}</em></div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>

@@ -9,18 +9,28 @@ import { agentState } from "./lib/agent";
 import { loadRemoteState, saveRemoteState } from "./lib/remoteState";
 import { storage, STORAGE_VERSION } from "./lib/storage";
 import { isSupabaseConfigured, supabase } from "./lib/supabase";
-import { CATEGORY_COUNTS, CATEGORY_TOTALS, formatCategoryValue, getCategoryTotals, OPPORTUNITY_CATEGORIES, programsInCategory } from "./data/opportunityCategories";
+import { formatCategoryValue, getCategoryTotals, programsInCategory } from "./data/opportunityCategories";
 import { groupProgramsByVendor } from "./lib/vendorSummary";
 import { MultiSelectDropdown } from "./components/MultiSelectDropdown";
 import { SingleSelectDropdown } from "./components/SingleSelectDropdown";
 import { ProgramCard } from "./components/ProgramCard";
 import { ProofView } from "./components/ProofView";
 import { GuidedView } from "./components/GuidedView";
+import { ListView } from "./components/ListView";
 import { Stat } from "./components/Stat";
-import { HeaderMenu } from "./components/HeaderMenu";
 import { AccentsModal } from "./components/AccentsModal";
+import {
+  AvatarIcon, AutomationIcon, ForMeIcon, GitHubIcon,
+  GridViewIcon, GuidedViewIcon, ListViewIcon, MoonIcon,
+  ProofIcon, SunIcon, VendorViewIcon,
+} from "./components/icons";
 import { applyAccents, clearLocalAccents, loadLocalAccents, mergeAccents, saveLocalAccents } from "./lib/accents";
 import { DEFAULT_ACCENTS } from "./data/accentDefaults";
+
+// The n_h brand tile from navinhill.com public assets — dark tile on the
+// dark theme, cream tile on light. Hosted on the brand CDN.
+const NH_ICON_DARK  = "https://media.navinhill.com/brand/android-chrome-dark-192x192.png";
+const NH_ICON_LIGHT = "https://media.navinhill.com/brand/android-chrome-192x192.png";
 
 export default function App() {
   const [statuses, setStatuses]           = useState({});
@@ -51,6 +61,17 @@ export default function App() {
 
   const [accents, setAccents]             = useState(() => mergeAccents(null));
   const [accentsSavedFlash, setAccentsSavedFlash] = useState(false);
+
+  // Theme lives in accents._theme so it syncs and persists with the rest of
+  // the appearance settings. Persist locally immediately on toggle.
+  const theme = accents._theme || "dark";
+  const toggleTheme = () => {
+    setAccents(a => {
+      const next = { ...a, _theme: (a._theme || "dark") === "dark" ? "light" : "dark" };
+      saveLocalAccents(next);
+      return next;
+    });
+  };
 
   // Toggle a key in a Set-typed filter state
   const toggleInSet = (setter) => (key) => setter(prev => {
@@ -345,54 +366,98 @@ export default function App() {
      <div className="shell">
 
       {/* HEADER */}
-      <div className="app-header" style={{ padding:"12px 22px 0", borderBottom:"1px solid var(--line-soft)" }}>
+      <div className="app-header" style={{ padding:"12px var(--pad-x) 0", borderBottom:"1px solid var(--line-soft)" }}>
         <div className="header-row">
-          <div className="header-title-block">
-            <div className="header-title-line">
-              <div className="header-wordmark" style={{ fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.05em", color:"var(--text)" }}>
-                BENEFIT HUNTER
-              </div>
+          <div className="header-brand">
+            <a
+              className="brand-logo"
+              href="https://navinhill.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Navin Hill — navinhill.com"
+              aria-label="Navin Hill (opens in new tab)"
+            >
+              <img
+                src={theme === "dark" ? NH_ICON_DARK : NH_ICON_LIGHT}
+                alt=""
+                width={28}
+                height={28}
+                loading="eager"
+              />
+            </a>
+            <div className="header-wordmark" style={{ fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.05em", color:"var(--text)" }}>
+              BENEFIT HUNTER
             </div>
           </div>
 
-          <nav className="opportunity-tabs" role="tablist" aria-label="Opportunity type">
-            {OPPORTUNITY_CATEGORIES.map(({ id, label }) => {
-              const count = CATEGORY_COUNTS[id];
-              const totals = CATEGORY_TOTALS[id];
-              const active = browseCategory === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setBrowseCategory(id)}
-                  className={"opportunity-tab" + (active ? " active" : "")}
-                >
-                  <span className="opportunity-tab-label">{label}</span>
-                  <span className="opportunity-tab-sub">
-                    <span className="opportunity-tab-count">{count}</span>
-                    <span className="opportunity-tab-value">{formatCategoryValue(totals.tier1CountedValue)}</span>
-                  </span>
-                </button>
-              );
-            })}
+          <nav className="view-switcher" aria-label="View mode">
+            {[
+              { id:"grid",      label:"Grid view",   Icon:GridViewIcon },
+              { id:"by_vendor", label:"Vendor view", Icon:VendorViewIcon },
+              { id:"list",      label:"List view",   Icon:ListViewIcon },
+              { id:"guided",    label:"Guided view", Icon:GuidedViewIcon },
+            ].map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                type="button"
+                className={"view-btn view-btn-icon" + (viewMode === id ? " active" : "")}
+                aria-label={label}
+                aria-pressed={viewMode === id}
+                title={label}
+                onClick={() => setViewMode(id)}
+              ><Icon /></button>
+            ))}
+            <span className="view-switcher-divider" aria-hidden="true" />
+            <button
+              type="button"
+              className={"view-btn view-btn-icon" + (onlyForMe ? " active" : "")}
+              aria-label="For Me"
+              aria-pressed={onlyForMe}
+              onClick={() => setOnlyForMe(value => !value)}
+              title="Filter to offers matching your profile"
+            ><ForMeIcon /></button>
           </nav>
 
-          <HeaderMenu
-            onlyForMe={onlyForMe}
-            onToggleForMe={() => setOnlyForMe(value => !value)}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            onOpenSettings={(tab) => { setSettingsTab(tab); setProfileOpen(true); }}
-            signedInUser={signedInUser}
-            syncStatus={syncStatus}
-            syncError={syncError}
-            syncLabel={syncLabel}
-            isSupabaseConfigured={isSupabaseConfigured}
-            onSignIn={signInWithProvider}
-            onSignOut={signOut}
-          />
+          <div className="header-actions">
+            <button
+              type="button"
+              className={"icon-btn" + (viewMode === "proof" ? " active" : "")}
+              aria-label="Proof view"
+              aria-pressed={viewMode === "proof"}
+              onClick={() => setViewMode(vm => vm === "proof" ? "grid" : "proof")}
+              title="Proof view"
+            ><ProofIcon /></button>
+            <a
+              className="icon-btn"
+              href="/automation-kit/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Automation kit (opens in new tab)"
+              aria-label="Automation kit (opens in new tab)"
+            ><AutomationIcon /></a>
+            <a
+              className="icon-btn"
+              href="https://github.com/jamesnavinhill/benefit-hunter"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub repository (opens in new tab)"
+              aria-label="GitHub repository (opens in new tab)"
+            ><GitHubIcon /></a>
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            >{theme === "dark" ? <SunIcon /> : <MoonIcon />}</button>
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => { setSettingsTab("appearance"); setProfileOpen(true); }}
+              title="Open settings — appearance, profile, application data"
+              aria-label="Profile settings"
+            ><AvatarIcon /></button>
+          </div>
         </div>
 
         {/* STATS */}
@@ -430,12 +495,16 @@ export default function App() {
 
       </div>
 
-      {/* CONSOLIDATED STICKY FILTER ROW */}
+      {/* CONSOLIDATED STICKY FILTER ROW — search leads, filters follow */}
       <div className="filter-row" style={{
-        padding:"9px 22px", borderBottom:"1px solid var(--line-soft)",
+        padding:"9px var(--pad-x)", borderBottom:"1px solid var(--line-soft)",
         position:"sticky", top:0, background:"color-mix(in oklch, var(--bg) 94%, transparent)", zIndex:10,
         backdropFilter:"blur(8px)",
       }}>
+        <input type="text" placeholder="Search benefits..." value={search}
+          onChange={e => setSearch(e.target.value)}
+          aria-label="Search benefits"
+          style={{ ...inp, cursor:"text", minHeight:28 }} />
         <MultiSelectDropdown
           label="Category"
           total={categoryPrograms.length}
@@ -456,7 +525,7 @@ export default function App() {
           onClear={clearSet(setAccessFilters)}
           getLabel={k => ACCESS_CONFIG[k].short}
           getCount={k => accessCounts[k]}
-          getTone={() => null}
+          getTone={k => ACCESS_CONFIG[k].tone}
         />
         <MultiSelectDropdown
           label="Criteria"
@@ -502,9 +571,6 @@ export default function App() {
           getCount={k => categoryPrograms.filter(p => (statuses[p.id] || "not_applied") === k).length}
           getTone={k => STATUS_CONFIG[k].tone === "neutral" ? null : STATUS_CONFIG[k].tone}
         />
-        <input type="text" placeholder="Search benefits..." value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{ ...inp, cursor:"text", minHeight:28 }} />
         <SingleSelectDropdown
           label={({ valueNum:"Value", match:"For Me First", agent:"Fill-Ready First", lane:"Lane", tier:"Tier", name:"A–Z" }[sortBy])}
           value={sortBy}
@@ -515,7 +581,7 @@ export default function App() {
       </div>
 
       {/* GRID / VENDOR VIEW */}
-      <div style={{ padding:"14px 22px 48px" }}>
+      <div style={{ padding:"14px var(--pad-x) 48px" }}>
         {!loaded ? (
           <div style={{ textAlign:"center", padding:"60px 0", color:"var(--line)", fontSize:10 }}>Loading...</div>
         ) : viewMode === "guided" ? (
@@ -544,6 +610,12 @@ export default function App() {
               fontFamily:"monospace", letterSpacing:"0.08em", textTransform:"uppercase",
             }}>× Clear All Filters</button>
           </div>
+        ) : viewMode === "list" ? (
+          <ListView
+            programs={filtered}
+            statuses={statuses}
+            onStatusChange={updateStatus}
+          />
         ) : viewMode === "grid" ? (
           <div className="card-grid">
             {filtered.map(p => (
@@ -551,8 +623,6 @@ export default function App() {
                 key={p.id} program={p}
                 status={statuses[p.id] || "not_applied"}
                 onStatusChange={updateStatus}
-                profileMatch={profileMatchSet.has(p.id)}
-                onVendorClick={(v) => setSearch(v)}
                 profileDoc={profileDoc}
               />
             ))}
@@ -614,7 +684,7 @@ export default function App() {
                               key={p.id} program={p}
                               status={statuses[p.id] || "not_applied"}
                               onStatusChange={updateStatus}
-                              profileMatch={profileMatchSet.has(p.id)}
+                              profileDoc={profileDoc}
                             />
                           ))}
                         </div>
@@ -630,7 +700,7 @@ export default function App() {
 
       {/* FOOTER */}
       <div style={{
-        borderTop:"1px solid var(--line-soft)", padding:"11px 22px",
+        borderTop:"1px solid var(--line-soft)", padding:"11px var(--pad-x)",
         display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:8,
         fontSize:8, color:"var(--text-dim2)", letterSpacing:"0.08em",
       }}>
@@ -652,7 +722,7 @@ export default function App() {
           position:"fixed", inset:0, zIndex:100,
           background:"rgba(0,0,0,0.65)", backdropFilter:"blur(3px)",
           display:"flex", alignItems:"flex-start", justifyContent:"center",
-          padding:"40px 20px", overflowY:"auto",
+          padding:"40px var(--pad-x) 28px", overflowY:"auto",
         }}>
           <div onClick={e => e.stopPropagation()} style={{
             background:"var(--surface-2)", border:"1px solid var(--line)", borderRadius:6,
@@ -676,9 +746,13 @@ export default function App() {
 
             <div className="settings-layout">
               <nav className="settings-nav" aria-label="Settings sections">
+                <div className="settings-section-label">Interface</div>
+                <button type="button" aria-selected={settingsTab === "appearance"} onClick={() => setSettingsTab("appearance")}>
+                  <span>◐</span> Appearance
+                </button>
                 <div className="settings-section-label">Profile</div>
                 <button type="button" aria-selected={settingsTab === "matching"} onClick={() => setSettingsTab("matching")}>
-                  <span>★</span> Benefit Matching
+                  <span>★</span> Profile
                 </button>
                 {Object.entries(PROFILE_SCHEMA).map(([sectionKey, section]) => {
                   const filled = section.fields.filter(f => profileDoc[f.key] && String(profileDoc[f.key]).trim()).length;
@@ -690,10 +764,6 @@ export default function App() {
                     </button>
                   );
                 })}
-                <div className="settings-section-label">Interface</div>
-                <button type="button" aria-selected={settingsTab === "appearance"} onClick={() => setSettingsTab("appearance")}>
-                  <span>◐</span> Appearance
-                </button>
               </nav>
 
               <main className="settings-main">
@@ -703,7 +773,7 @@ export default function App() {
             {/* Profile match checkboxes */}
             <div style={{ marginBottom:18 }}>
               <div style={{ fontSize:15, color:"var(--text)", fontWeight:700, marginBottom:4 }}>
-                Benefit Matching
+                Profile
               </div>
               <div style={{ fontSize:10, color:"var(--text-dim)", lineHeight:1.5, marginBottom:14 }}>
                 Tell Benefit Hunter which access paths and requirements are available to you. This only powers “For Me” filtering—it does not hide opportunities by default.
@@ -822,6 +892,28 @@ export default function App() {
                 />
               )}
               </main>
+            </div>
+
+            {/* Account / sync strip — relocated from the retired header menu */}
+            <div className="settings-account">
+              {signedInUser ? (
+                <>
+                  <span className={"sync-dot sync-" + syncStatus} title={syncLabel + (syncError ? " · " + syncError : "")} />
+                  <span className="settings-account-email" title={signedInUser.email || signedInUser.user_metadata?.user_name || ""}>
+                    {signedInUser.email || signedInUser.user_metadata?.user_name || signedInUser.id}
+                  </span>
+                  <span className="settings-account-status">{syncLabel}{syncError ? " · " + syncError : ""}</span>
+                  <button type="button" onClick={signOut}>← Sign out</button>
+                </>
+              ) : isSupabaseConfigured ? (
+                <>
+                  <span className="settings-account-status">Sign in to sync across devices</span>
+                  <button type="button" onClick={() => signInWithProvider("github")}>Sign in with GitHub</button>
+                  <button type="button" onClick={() => signInWithProvider("google")}>Sign in with Google</button>
+                </>
+              ) : (
+                <span className="settings-account-status">Saved locally on this device</span>
+              )}
             </div>
           </div>
         </div>

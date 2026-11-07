@@ -98,28 +98,6 @@ export function AccentsModal({ open, embedded = false, accents, onChange, onClos
             </div>
           </div>
           <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:8 }}>
-            {/* Theme toggle */}
-            <div style={{
-              display:"inline-flex", border:"1px solid var(--line)", borderRadius:3,
-              padding:2, gap:2,
-            }}>
-              {["dark","light"].map(t => {
-                const active = (accents._theme || "dark") === t;
-                return (
-                  <button key={t}
-                    onClick={() => onChange({ ...accents, _theme: t })}
-                    style={{
-                      background: active ? "var(--line-soft)" : "transparent",
-                      color: active ? "var(--text)" : "var(--text-dim)",
-                      border:"none", borderRadius:2,
-                      padding:"4px 10px", cursor:"pointer",
-                      fontSize:9, fontFamily:"monospace", letterSpacing:"0.08em",
-                      textTransform:"uppercase",
-                    }}
-                  >{t}</button>
-                );
-              })}
-            </div>
             {!embedded && (
               <button onClick={handleCancel} style={{
                 background:"transparent", border:"1px solid var(--line)",

@@ -28,6 +28,16 @@
   --cat-tech:       oklch(0.70 0.17 25);
   --cat-science:    oklch(0.78 0.12 195);
 
+  /* Access pills — a warm, muted family that complements the category hues.
+   * Lower chroma than the cat tones so the two families read at different
+   * volumes: category = what it is, access = how you get in. */
+  --acc-any:   oklch(0.70 0.025 75); /* warm taupe */
+  --acc-biz:   oklch(0.74 0.085 55); /* clay */
+  --acc-edu:   oklch(0.80 0.095 90); /* honey */
+  --acc-np:    oklch(0.75 0.085 20); /* dusty rose */
+  --acc-oss:   oklch(0.78 0.085 65); /* apricot */
+  --acc-accel: oklch(0.72 0.095 38); /* rust */
+
   /* === Dark theme (default) === */
   --neutral: oklch(0.68 0.005 280);
   --action-text: #080807;
@@ -64,6 +74,22 @@
   --surface-2: oklch(0.945 0.010 78);
   --line:      oklch(0.70  0.012 78);
   --line-soft: oklch(0.82  0.011 78);
+
+  /* Pill tones need light-surface variants — the dark-theme values are far
+   * too pale to read as text or borders on light backgrounds. */
+  --cat-devops:     oklch(0.45 0.13 250);
+  --cat-multimedia: oklch(0.44 0.15 305);
+  --cat-research:   oklch(0.46 0.13 148);
+  --cat-business:   oklch(0.50 0.13 85);
+  --cat-tech:       oklch(0.47 0.14 25);
+  --cat-science:    oklch(0.46 0.11 195);
+
+  --acc-any:   oklch(0.44 0.025 75);
+  --acc-biz:   oklch(0.50 0.095 55);
+  --acc-edu:   oklch(0.52 0.10 90);
+  --acc-np:    oklch(0.50 0.095 20);
+  --acc-oss:   oklch(0.52 0.095 65);
+  --acc-accel: oklch(0.48 0.105 38);
 
   /* Text shades — derived from neutral, darker on light surfaces */
   --text:      oklch(from var(--neutral) calc(l - 0.20) c h);

@@ -1,26 +1,28 @@
 import { ACCESS_CONFIG } from "../data/access";
+import { toneStyle } from "../lib/tone";
 
-// Access badges are neutral — text-only differentiation.
+// Access pill — warm muted tone family, metrics identical to the category
+// Badge (font 8, padding 2px 6px) so the two pill types read as one row unit.
 export function AccessBadge({ accessKey }) {
   const access = ACCESS_CONFIG[accessKey];
   if (!access) return null;
+  const t = toneStyle(access.tone);
 
   return (
     <span
       title={access.desc}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "3px 7px",
-        background: "color-mix(in oklch, var(--neutral) 10%, transparent)",
-        border: "1px solid color-mix(in oklch, var(--neutral) 28%, transparent)",
-        borderRadius: 3,
-        flexShrink: 0,
-        fontSize: 9,
+        fontSize: 8,
         fontWeight: 700,
-        color: "var(--text-dim)",
-        letterSpacing: "0.08em",
+        letterSpacing: "0.12em",
         textTransform: "uppercase",
+        background: t.bg,
+        color: t.color,
+        border: "1px solid " + t.border,
+        padding: "2px 6px",
+        borderRadius: 2,
+        whiteSpace: "nowrap",
+        flexShrink: 0,
       }}
     >
       {access.short}
