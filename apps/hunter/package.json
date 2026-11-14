@@ -26,5 +26,8 @@
   },
   "overrides": {
     "minimatch": "^11.0.5"
+  },
+  "allowScripts": {
+    "esbuild": true
   }
 }
